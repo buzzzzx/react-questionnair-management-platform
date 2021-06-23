@@ -1,5 +1,5 @@
 import { Form, Input } from "antd";
-
+import { LongButton } from "../../components/lib";
 export const LoginScreen = () => {
   const handleSubmit = () => {};
   return (
@@ -17,9 +17,9 @@ export const LoginScreen = () => {
         <Input placeholder={"密码"} type="password" id="password" />
       </Form.Item>
       <Form.Item>
-        <LoginScreen type="primary" htmlType={"submit"}>
+        <LongButton type="primary" htmlType={"submit"}>
           登录
-        </LoginScreen>
+        </LongButton>
       </Form.Item>
     </Form>
   );
