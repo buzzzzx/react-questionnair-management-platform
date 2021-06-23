@@ -19,7 +19,9 @@ export const User = () => {
         </Menu>
       }
     >
-      Hello, remie
+      <Button type={"link"} onClick={(event) => event.preventDefault()}>
+        Hi, remie!
+      </Button>
     </Dropdown>
   );
 };
