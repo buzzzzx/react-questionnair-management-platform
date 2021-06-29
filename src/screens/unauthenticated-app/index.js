@@ -6,13 +6,13 @@ import left from "../../assets/left.svg";
 import right from "../../assets/right.svg";
 import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
-import { Row } from "../../components/lib";
+import { ErrorBox, Row } from "../../components/lib";
 
 export const UnauthenticatedApp = () => {
   // TODO 标题 helmet
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState(null);
 
-  // TODO 错误处理 Error box
   return (
     <Container>
       <Header>
@@ -22,7 +22,12 @@ export const UnauthenticatedApp = () => {
       <Background />
       <ShadowCard>
         <Title>{isRegister ? "请注册" : "请登录"}</Title>
-        {isRegister ? <RegisterScreen /> : <LoginScreen />}
+        <ErrorBox error={error} />
+        {isRegister ? (
+          <RegisterScreen onError={setError} />
+        ) : (
+          <LoginScreen onError={setError} />
+        )}
         <Divider />
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>

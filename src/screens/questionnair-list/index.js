@@ -1,10 +1,21 @@
 // TODO 可以使用 AntDesign 的 PageHeader 来做每个 questionnaire 的展示
-import { Row, ScreenContainer } from "../../components/lib";
+import { ErrorBox, Row, ScreenContainer } from "../../components/lib";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 import { Button } from "antd";
+import { useQuestionnairesSearchParam } from "./util";
+import { useQuestionnaires } from "../../utils/questionnaire";
+import { useDebounce } from "../../utils";
 
 export const QuestionnaireListScreen = () => {
+  const [params, setParams] = useQuestionnairesSearchParam();
+
+  const {
+    isLoading,
+    error,
+    data: list = [],
+  } = useQuestionnaires(useDebounce(params, 200));
+
   return (
     <ScreenContainer>
       <Row between={true}>
@@ -14,11 +25,11 @@ export const QuestionnaireListScreen = () => {
             创建问卷
           </Button>
         </Row>
-        <SearchPanel />
+        <SearchPanel params={params} setParams={setParams} />
       </Row>
 
-      {/*<ErrorBox error={error} />*/}
-      <List />
+      <ErrorBox error={error} />
+      <List loading={isLoading} list={list} />
     </ScreenContainer>
   );
 };

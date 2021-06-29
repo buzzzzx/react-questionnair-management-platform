@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 
 export const Row = styled.div`
   display: flex;
@@ -32,3 +32,14 @@ export const ScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const isError = (value) => {
+  return Object.prototype.toString.call(value) === "[object Error]";
+};
+
+export const ErrorBox = ({ error }) => {
+  if (isError(error)) {
+    return <Typography.Text type={"danger"}> {error?.message}</Typography.Text>;
+  }
+  return null;
+};

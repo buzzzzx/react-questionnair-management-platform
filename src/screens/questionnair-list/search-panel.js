@@ -1,6 +1,8 @@
 import { Form, Input, Select } from "antd";
 
-export const SearchPanel = () => {
+export const SearchPanel = ({ params, setParams }) => {
+  // TODO 排序和状态筛选
+
   return (
     <Form css={{ marginBottom: "4rem" }} layout={"inline"}>
       <Form.Item>
@@ -22,8 +24,8 @@ export const SearchPanel = () => {
         <Input
           type="text"
           placeholder={"输入问卷名称"}
-          value={""}
-          onChange={() => {}}
+          value={params.name}
+          onChange={(evt) => setParams({ ...params, name: evt.target.value })}
         />
       </Form.Item>
     </Form>

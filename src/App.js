@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AuthenticatedApp } from "./screens/authenticated-app";
 import { UnauthenticatedApp } from "./screens/unauthenticated-app";
 import { Button } from "antd";
-import { useAuth } from "./context/auth-context";
+// import { useAuth } from "./context/auth-context";
 
 function App() {
   // const {user} = useAuth();

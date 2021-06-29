@@ -4,13 +4,13 @@ import "./index.css";
 import App from "./App";
 import "antd/dist/antd.less";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "./context/auth-context";
+import { AppProviders } from "./context";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AuthProvider>
+    <AppProviders>
       <App />
-    </AuthProvider>
+    </AppProviders>
   </React.StrictMode>,
   document.getElementById("root")
 );
