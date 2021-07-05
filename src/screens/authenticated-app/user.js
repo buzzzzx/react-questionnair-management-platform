@@ -1,10 +1,8 @@
 import { Dropdown, Menu, Button } from "antd";
+import { useAuth } from "../../context/auth-context";
 
 export const User = () => {
-  // TODO 获取 user
-
-  // TODO logout
-  const logout = () => {};
+  const { user, logout } = useAuth();
 
   return (
     <Dropdown
@@ -20,7 +18,7 @@ export const User = () => {
       }
     >
       <Button type={"link"} onClick={(event) => event.preventDefault()}>
-        Hi, remie!
+        Hi, {user.username}!
       </Button>
     </Dropdown>
   );

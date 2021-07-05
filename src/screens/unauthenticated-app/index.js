@@ -7,6 +7,8 @@ import right from "../../assets/right.svg";
 import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
 import { ErrorBox, Row } from "../../components/lib";
+import { Navigate, Route, Routes } from "react-router";
+import { BrowserRouter as Router } from "react-router-dom";
 
 export const UnauthenticatedApp = () => {
   // TODO 标题 helmet
@@ -33,6 +35,12 @@ export const UnauthenticatedApp = () => {
         <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? "已经有帐号了？直接登录" : "没有帐号？注册新帐号"}
         </Button>
+        {/*<Router>*/}
+        {/*  <Routes>*/}
+        {/*    <Route to={} element={}/>*/}
+        {/*    <Route />*/}
+        {/*  </Routes>*/}
+        {/*</Router>*/}
       </ShadowCard>
     </Container>
   );

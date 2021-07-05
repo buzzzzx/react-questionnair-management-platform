@@ -15,10 +15,12 @@ export const cleanObject = (object) => {
   return result;
 };
 
-export const subset = (entries, keys) => {
-  const filtered = entries.filter(([key]) => keys.include(key));
+export const subset = (obj, keys) => {
+  const filtered = Object.entries(obj).filter(([key]) => keys.includes(key));
   return Object.fromEntries(filtered);
 };
+
+export const resetRoute = () => (window.location.href = window.location.origin); // 这样写可以刷新页面
 
 /**
  * Custom Hooks

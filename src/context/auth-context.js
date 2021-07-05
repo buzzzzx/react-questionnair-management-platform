@@ -6,6 +6,7 @@ import { useMount } from "../utils";
 import { useAsync } from "../utils/use-async";
 // import { FullPageErrorFallback, FullPageLoading } from "../components/lib";
 import { useQueryClient } from "react-query";
+import { FullPageErrorFallback, FullPageLoading } from "../components/lib";
 
 const bootstrapUser = async () => {
   let user = null;
@@ -50,13 +51,11 @@ export const AuthProvider = ({ children }) => {
     run(bootstrapUser());
   });
 
-  // TODO FullPageLoading
   if (isLoading || isIdle) {
-    return <div>Loading</div>;
+    return <FullPageLoading />;
   }
-  // TODO FullPageError
   if (isError) {
-    return <div>Error</div>;
+    return <FullPageErrorFallback error={error} />;
   }
 
   return (

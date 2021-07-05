@@ -2,13 +2,16 @@ import { cleanObject, subset } from "./index";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const useUrlQuerySearchParam = (keys) => {
+export const useUrlQueryParam = (keys) => {
   const [searchParams] = useSearchParams();
   const setSearchParams = useSetUrlQueryParams();
 
   return [
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useMemo(() => subset(searchParams, keys), [searchParams]),
+    useMemo(
+      () => subset(Object.fromEntries(searchParams), keys),
+      [searchParams]
+    ),
     (params) => setSearchParams(params),
   ];
 };

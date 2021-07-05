@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
+import { Button, Spin, Typography } from "antd";
 
 export const Row = styled.div`
   display: flex;
@@ -43,3 +43,22 @@ export const ErrorBox = ({ error }) => {
   }
   return null;
 };
+
+const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const FullPageLoading = () => (
+  <FullPage>
+    <Spin size={"large"} />
+  </FullPage>
+);
+
+export const FullPageErrorFallback = ({ error }) => (
+  <FullPage>
+    <ErrorBox error={error} />
+  </FullPage>
+);

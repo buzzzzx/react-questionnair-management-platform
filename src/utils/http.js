@@ -3,7 +3,8 @@ import * as auth from "../auth-provider";
 import { useAuth } from "../context/auth-context";
 import { useCallback } from "react";
 
-const apiUrl = process.env.REACT_APP_API_URL;
+// const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = "http://121.36.47.113:3000";
 
 export const http = (
   endpoint,

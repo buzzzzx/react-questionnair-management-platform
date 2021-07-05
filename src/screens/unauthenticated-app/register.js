@@ -16,6 +16,7 @@ export const RegisterScreen = ({ onError }) => {
     try {
       await run(register({ username, password }));
     } catch (e) {
+      // TODO error
       onError(e);
     }
   };

@@ -3,12 +3,13 @@ import { Row } from "../../components/lib";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { User } from "./user";
 import { QuestionnairesPopover } from "./questionnaires-popover";
+import { resetRoute } from "../../utils";
 
 export const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <LogoTitle>
+        <LogoTitle onClick={resetRoute}>
           <Logo width={"7rem"} />
           <h4 style={{ fontWeight: "bolder" }}>问卷管理平台</h4>
         </LogoTitle>

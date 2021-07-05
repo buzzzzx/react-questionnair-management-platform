@@ -7,203 +7,155 @@ import {
   Statistic,
   Tag,
   Modal,
+  Spin,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
+import {
+  useDeleteQuestionnaire,
+  useEditReleaseQuestionnaire,
+} from "../../utils/questionnaire";
+import { useQuestionnairesQueryKey } from "./util";
+import { Link } from "react-router-dom";
 
-export const List = ({ list }) => {
-  const deleteQuestionnaire = () => {};
+export const List = ({ list, loading }) => {
+  // TODO 路由：创建，预览，统计分析，编辑
+  // TODO 列表滑动 bug，
+  // TODO 还没有问卷 优化样式
+  // TODO 编辑问卷时状态为发布中则弹出窗口提示停止发布
+  // TODO 填写链接
+  // TODO 答卷数量实时更新
+  // TODO 批量删除
+
+  // 删除
+  const { mutate: deleteQuestionnaire } = useDeleteQuestionnaire(
+    useQuestionnairesQueryKey()
+  );
+
+  // 发布（停止发布）
+  const {
+    mutateAsync: editRelease,
+    error,
+    isLoading: editLoading,
+  } = useEditReleaseQuestionnaire(useQuestionnairesQueryKey());
+
   return (
     <>
-      {list.map((questionnaire, index) => {
-        const {
-          title,
-          subTitle,
-          status,
-          answerCount,
-          createTime,
-          endTime,
-          answerLink,
-        } = questionnaire;
+      {loading ? (
+        <Spin size={"large"} />
+      ) : list.length === 0 ? (
+        <div>还没有问卷，赶快去创建</div>
+      ) : (
+        list.map((questionnaire, index) => {
+          const {
+            id,
+            title,
+            description,
+            status,
+            answerCount,
+            lastEditedTime,
+            releaseTime,
+            openCode,
+          } = questionnaire;
 
-        let tagColor, statusText, buttonText;
-        if (status === 0) {
-          tagColor = "blue";
-          statusText = "未发布";
-          buttonText = "发布";
-        } else if (status === 1) {
-          tagColor = "green";
-          statusText = "发布中";
-          buttonText = "停止发布";
-        } else {
-          tagColor = "yellow";
-          statusText = "已结束";
-          buttonText = "发布"; // 还需要设置截止时间
-        }
+          let tagColor, statusText, buttonText;
+          if (status === 1) {
+            tagColor = "blue";
+            statusText = "未发布";
+            buttonText = "发布";
+          } else if (status === 2) {
+            tagColor = "green";
+            statusText = "发布中";
+            buttonText = "停止发布";
+          } else {
+            tagColor = "yellow";
+            statusText = "已结束";
+            buttonText = "发布"; // 还需要设置截止时间
+          }
 
-        return (
-          <>
-            <PageHeader
-              key={index}
-              title={title}
-              tags={<Tag color={tagColor}>{statusText}</Tag>}
-              subTitle={subTitle}
-              extra={[
-                <More
-                  key={"3"}
-                  questionnaire={questionnaire}
-                  name={"查看问卷"}
-                  operations={[
-                    { name: "预览", handler: () => {} },
-                    { name: "统计分析", handler: () => {} },
-                  ]}
-                />,
-                <More
-                  key={"2"}
-                  questionnaire={questionnaire}
-                  name={"编辑问卷"}
-                  operations={[
-                    { name: "编辑", handler: () => {} },
-                    {
-                      name: "删除",
-                      handler: (id) => {
-                        Modal.confirm({
-                          title: "确定删除这个问卷吗？",
-                          content: "点击确定删除",
-                          okText: "确定",
-                          onOk() {
-                            deleteQuestionnaire({ id });
-                          },
-                        });
+          return (
+            <>
+              <PageHeader
+                key={index}
+                title={title}
+                tags={<Tag color={tagColor}>{statusText}</Tag>}
+                subTitle={description || ""}
+                extra={[
+                  <More
+                    key={"3"}
+                    name={"查看问卷"}
+                    operations={[
+                      <Link to={`${String(id)}/preview`}>预览</Link>,
+                      <Link to={`${String(id)}/analysis`}>统计分析</Link>,
+                    ]}
+                  />,
+                  <More
+                    key={"2"}
+                    name={"编辑问卷"}
+                    operations={[
+                      <Link to={`${String(id)}/editing`}>编辑</Link>,
+                      {
+                        name: "删除",
+                        handler: () => {
+                          Modal.confirm({
+                            title: "确定删除这个问卷吗？",
+                            content: "点击确定删除",
+                            okText: "确定",
+                            onOk() {
+                              deleteQuestionnaire({ id });
+                            },
+                          });
+                        },
                       },
-                    },
-                  ]}
-                />,
-                <Button key="1" type="primary">
-                  {buttonText}
-                </Button>,
-              ]}
-            >
-              <Row>
-                <Statistic title="发布状态" value={statusText} />
-                <Statistic
-                  title="答卷数量"
-                  // prefix="$"
-                  value={answerCount}
-                  style={{
-                    margin: "0 32px",
-                  }}
-                />
-                {/*<Statistic title="Balance" prefix="$" value={3345.08} />*/}
-              </Row>
-              <br />
-              <Descriptions size="small" column={3}>
-                <Descriptions.Item label="创建时间">
-                  {/*2021-06-23*/}
-                  {dayjs(createTime).format("YYYY-MM-DD")}
-                </Descriptions.Item>
-                <Descriptions.Item label="截止时间">
-                  {/*2021-06-24*/}
-                  {dayjs(endTime).format("YYYY-MM-DD")}
-                </Descriptions.Item>
-                <Descriptions.Item label="填写链接">
-                  {answerLink}
-                </Descriptions.Item>
-              </Descriptions>
+                    ]}
+                  />,
+                  <Button
+                    key="1"
+                    type="primary"
+                    onClick={() => {
+                      // TODO 结束状态
+                      editRelease({
+                        id: questionnaire.id,
+                        status: status === 1 ? 2 : 1,
+                      });
+                    }}
+                  >
+                    {buttonText}
+                  </Button>,
+                ]}
               >
-            </PageHeader>
-            {index === list.length - 1 ? <Divider /> : null}
-          </>
-        );
-      })}
-
-      <PageHeader
-        title="XXX产品用户调研"
-        tags={<Tag color="blue">未发布</Tag>}
-        subTitle=""
-        extra={[
-          <More
-            key={"3"}
-            questionnaire={undefined}
-            operations={"查看问卷"}
-            operation1={"预览"}
-            operation2={"统计分析"}
-          />,
-          <More
-            key={"2"}
-            questionnaire={undefined}
-            operations={"编辑问卷"}
-            operation1={"编辑"}
-            operation2={"删除"}
-          />,
-          <Button key="1" type="primary">
-            发布
-          </Button>,
-        ]}
-      >
-        <Row>
-          <Statistic title="发布状态" value="未发布" />
-          <Statistic
-            title="答卷数量"
-            // prefix="$"
-            value={0}
-            style={{
-              margin: "0 32px",
-            }}
-          />
-          {/*<Statistic title="Balance" prefix="$" value={3345.08} />*/}
-        </Row>
-        <br />
-        <Descriptions size="small" column={3}>
-          <Descriptions.Item label="创建时间">2021-06-23</Descriptions.Item>
-          <Descriptions.Item label="截止时间">2021-06-24</Descriptions.Item>
-          <Descriptions.Item label="填写链接"></Descriptions.Item>
-        </Descriptions>
-      </PageHeader>
-      <Divider />
-      <PageHeader
-        title="上课签到"
-        tags={<Tag color="green">已发布</Tag>}
-        subTitle="量子计算的哲学与逻辑课程签到问卷"
-        extra={[
-          <More
-            key={"3"}
-            questionnaire={undefined}
-            operations={"查看问卷"}
-            operation1={"预览"}
-            operation2={"统计分析"}
-          />,
-          <More
-            key={"2"}
-            questionnaire={undefined}
-            operations={"编辑问卷"}
-            operation1={"编辑"}
-            operation2={"删除"}
-          />,
-          <Button key="1" type="primary">
-            停止发布
-          </Button>,
-        ]}
-      >
-        <Row>
-          <Statistic title="发布状态" value="已发布" />
-          <Statistic
-            title="答卷数量"
-            // prefix="$"
-            value={77}
-            style={{
-              margin: "0 32px",
-            }}
-          />
-          {/*<Statistic title="Balance" prefix="$" value={3345.08} />*/}
-        </Row>
-        <br />
-        <Descriptions size="small" column={3}>
-          <Descriptions.Item label="创建时间">2021-06-23</Descriptions.Item>
-          <Descriptions.Item label="截止时间">2021-06-24</Descriptions.Item>
-          <Descriptions.Item label="填写链接">xxxx</Descriptions.Item>
-        </Descriptions>
-      </PageHeader>
+                <Row>
+                  <Statistic title="发布状态" value={statusText} />
+                  <Statistic
+                    title="答卷数量"
+                    // prefix="$"
+                    value={answerCount}
+                    style={{
+                      margin: "0 32px",
+                    }}
+                  />
+                  {/*<Statistic title="Balance" prefix="$" value={3345.08} />*/}
+                </Row>
+                <br />
+                <Descriptions size="small" column={3}>
+                  <Descriptions.Item label="上次编辑时间">
+                    {dayjs(lastEditedTime).format("YYYY-MM-DD hh:mm:ss")}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="发布时间">
+                    {releaseTime
+                      ? dayjs(releaseTime).format("YYYY-MM-DD hh:mm:ss")
+                      : "还没发布"}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="填写链接">
+                    {openCode ?? "还没发布"}
+                  </Descriptions.Item>
+                </Descriptions>
+              </PageHeader>
+              {index !== list.length - 1 ? <Divider /> : null}
+            </>
+          );
+        })
+      )}
     </>
   );
 };
@@ -212,11 +164,11 @@ export const List = ({ list }) => {
  * questionnaire list 返回 [] 的元素需要的字段
  * id
  * title
- * subTitle
- * status: 0-未发布；1-发布中；2-已结束
+ * description
+ * status: 1-未发布；2-发布中；3-已结束
  * answerCount: 答卷数量
  * createTime: 创建时间，时间戳
- * endTime: 截止时间，时间戳
+ * releaseTime: 发布时间
  * answerLink: 填写链接
  */
 
