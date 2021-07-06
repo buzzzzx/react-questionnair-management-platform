@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
 import { ErrorBox, Row } from "../../components/lib";
 import { Navigate, Route, Routes } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 export const UnauthenticatedApp = () => {
   // TODO 标题 helmet
@@ -17,31 +17,35 @@ export const UnauthenticatedApp = () => {
 
   return (
     <Container>
-      <Header>
-        <Logo width={"7rem"} />
-        <div>欢迎来到问卷管理平台👏</div>
-      </Header>
-      <Background />
-      <ShadowCard>
-        <Title>{isRegister ? "请注册" : "请登录"}</Title>
-        <ErrorBox error={error} />
-        {isRegister ? (
-          <RegisterScreen onError={setError} />
-        ) : (
-          <LoginScreen onError={setError} />
-        )}
-        <Divider />
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
-          {isRegister ? "已经有帐号了？直接登录" : "没有帐号？注册新帐号"}
-        </Button>
-        {/*<Router>*/}
-        {/*  <Routes>*/}
-        {/*    <Route to={} element={}/>*/}
-        {/*    <Route />*/}
-        {/*  </Routes>*/}
-        {/*</Router>*/}
-      </ShadowCard>
+      <Router>
+        <Header>
+          <Logo width={"7rem"} />
+          <div>欢迎来到问卷管理平台👏</div>
+        </Header>
+        <Background />
+        <ShadowCard>
+          <Title>{isRegister ? "请注册" : "请登录"}</Title>
+          <ErrorBox error={error} />
+          <Routes>
+            <Route
+              path={"/login"}
+              element={<LoginScreen onError={setError} />}
+            />
+            <Route
+              path={"/register"}
+              element={<RegisterScreen onError={setError} />}
+            />
+            <Navigate to={"/login"} />
+          </Routes>
+          <Divider />
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
+            <Link to={isRegister ? "/login" : "/register"}>
+              {isRegister ? "已经有帐号了？直接登录" : "没有帐号？注册新帐号"}
+            </Link>
+          </Button>
+        </ShadowCard>
+      </Router>
     </Container>
   );
 };
