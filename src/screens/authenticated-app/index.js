@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { PageHeader } from "./page-header";
 import { QuestionnaireListScreen } from "../questionnair-list";
 import { Navigate, Route, Routes } from "react-router";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Questionnaire } from "../questionnaire";
 
 export const AuthenticatedApp = () => {
@@ -12,38 +11,30 @@ export const AuthenticatedApp = () => {
 
   return (
     <Container>
-      <Router>
-        <PageHeader />
-        <Main>
-          <Routes>
-            <Route
-              path={"/questionnaires"}
-              element={<QuestionnaireListScreen />}
-            />
-            <Route
-              path={"/questionnaires/create"}
-              element={<Questionnaire />}
-            />
-            <Route
-              path={"/questionnaires/:id/editing"}
-              element={<Questionnaire />}
-            />
-            <Route
-              path={"/questionnaires/:id/preview"}
-              element={<Questionnaire />}
-            />
-            <Route
-              path={"/questionnaires/:id/analysis"}
-              element={<Questionnaire />}
-            />
-            {/*<Route*/}
-            {/*  path={"/questionnaires/:questionnaireId/*"}*/}
-            {/*  element={<ProjectScreen />}*/}
-            {/*/>*/}
-            <Navigate to={"/questionnaires"} />
-          </Routes>
-        </Main>
-      </Router>
+      <PageHeader />
+      <Main>
+        <Routes>
+          <Route
+            path={"/questionnaires"}
+            element={<QuestionnaireListScreen />}
+          />
+          <Route path={"/questionnaires/create"} element={<Questionnaire />} />
+          <Route
+            path={"/questionnaires/:id/editing"}
+            element={<Questionnaire />}
+          />
+          <Route
+            path={"/questionnaires/:id/preview"}
+            element={<Questionnaire />}
+          />
+          <Route
+            path={"/questionnaires/:id/analysis"}
+            element={<Questionnaire />}
+          />
+          <Route path={"/write/*"} element={<Questionnaire />} />
+          <Navigate to={"/questionnaires"} />
+        </Routes>
+      </Main>
     </Container>
   );
 };

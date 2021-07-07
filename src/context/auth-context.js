@@ -7,6 +7,7 @@ import { useAsync } from "../utils/use-async";
 // import { FullPageErrorFallback, FullPageLoading } from "../components/lib";
 import { useQueryClient } from "react-query";
 import { FullPageErrorFallback, FullPageLoading } from "../components/lib";
+import { useNavigate } from "react-router-dom";
 
 const bootstrapUser = async () => {
   let user = null;
@@ -38,17 +39,31 @@ export const AuthProvider = ({ children }) => {
   } = useAsync();
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  const login = (form) => auth.login(form).then(setUser);
-  const register = (form) => auth.register(form).then(setUser);
+  const login = (form) =>
+    auth.login(form).then((user) => {
+      setUser(user);
+      navigate("/questionnaires");
+    });
+  const register = (form) =>
+    auth.register(form).then((user) => {
+      setUser(user);
+      navigate("/questionnaires");
+    });
   const logout = () =>
     auth.logout().then(() => {
       setUser(null);
       queryClient.clear();
+      navigate("/login");
     });
 
   useMount(() => {
-    run(bootstrapUser());
+    run(bootstrapUser()).then((user) => {
+      if (user == null) {
+        navigate("/login");
+      }
+    });
   });
 
   if (isLoading || isIdle) {

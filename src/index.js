@@ -5,12 +5,15 @@ import App from "./App";
 import "antd/dist/antd.less";
 import reportWebVitals from "./reportWebVitals";
 import { AppProviders } from "./context";
+import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
+    <Router>
+      <AppProviders>
+        <App />
+      </AppProviders>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

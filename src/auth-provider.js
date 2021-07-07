@@ -1,4 +1,5 @@
 // const apiUrl = process.env.QUESTIONNAIRES_APP_API_URL;
+
 const apiUrl = "http://121.36.47.113:3000";
 
 const localStorageKey = "__questionnaire_user_auth_provider_key__";
@@ -42,5 +43,6 @@ export const register = (data) => {
   });
 };
 
-export const logout = async () =>
+export const logout = async () => {
   window.localStorage.removeItem(localStorageKey);
+};

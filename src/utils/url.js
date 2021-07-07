@@ -7,9 +7,9 @@ export const useUrlQueryParam = (keys) => {
   const setSearchParams = useSetUrlQueryParams();
 
   return [
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useMemo(
       () => subset(Object.fromEntries(searchParams), keys),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [searchParams]
     ),
     (params) => setSearchParams(params),
