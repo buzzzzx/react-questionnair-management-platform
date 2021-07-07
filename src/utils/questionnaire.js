@@ -66,3 +66,18 @@ export const useDeleteQuestionnaire = (queryKey) => {
     useDeleteConfig(queryKey)
   );
 };
+
+export const useQuestionnaire = (id) => {
+  const client = useHttp();
+
+  return useQuery(
+    ["questionnaire", { id }],
+    () =>
+      client(`questionnaires/${id}/view`, {
+        method: "GET",
+      }),
+    {
+      enabled: !!id,
+    }
+  );
+};
