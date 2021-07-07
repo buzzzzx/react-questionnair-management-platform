@@ -23,6 +23,8 @@ export const useSetUrlQueryParams = () => {
       ...Object.fromEntries(searchParams),
       ...params,
     });
+
+    // TODO /questionnaires?
     return setSearchParams(o);
   };
 };

@@ -18,7 +18,10 @@ export const QuestionnaireListScreen = () => {
 
   return (
     <ScreenContainer>
-      <Row style={{ margin: "10px 10px 10px 20px" }} between={true}>
+      <Row
+        style={{ width: "98%", margin: "10px 10px 10px 25px" }}
+        between={true}
+      >
         <Row gap={true}>
           <h1>问卷列表</h1>
           <Button type={"primary"}>

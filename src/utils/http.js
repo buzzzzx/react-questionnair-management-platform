@@ -14,13 +14,19 @@ export const http = (
     method: "GET",
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
-      "Content-Type": data ? "application/json" : "",
+      "Content-Type":
+        data === undefined || Object.keys(data).length === 0
+          ? ""
+          : "application/json",
     },
     ...customConfig,
   };
 
   if (config.method.toUpperCase() === "GET") {
-    endpoint += `?${qs.stringify(data)}`;
+    endpoint +=
+      data === undefined || Object.keys(data).length === 0
+        ? ""
+        : `?${qs.stringify(data)}`;
   } else {
     config.body = JSON.stringify(data || {});
   }

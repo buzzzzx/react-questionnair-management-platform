@@ -39,7 +39,12 @@ export const List = ({ list, loading }) => {
   return (
     <ListContainer>
       {loading ? (
-        <Spin size={"large"} />
+        <Spin
+          style={{
+            margin: "70px",
+          }}
+          size={"small"}
+        />
       ) : list.length === 0 ? (
         <EmptyQuestionnaires />
       ) : (

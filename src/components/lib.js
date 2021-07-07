@@ -27,6 +27,8 @@ export const ButtonNoPadding = styled(Button)`
 `;
 
 export const ScreenContainer = styled.div`
+  align-items: center;
+  justify-content: center;
   padding: 3.2rem;
   width: 100%;
   display: flex;
