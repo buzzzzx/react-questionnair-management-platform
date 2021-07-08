@@ -8,6 +8,7 @@ import {
   Checkbox,
   Tooltip,
   message,
+  Switch,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
@@ -26,6 +27,7 @@ import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   RiseOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
@@ -35,6 +37,7 @@ const apiUrl = "http://121.36.47.113:3000";
 export const List = ({ list, loading, deletes, setDeletes }) => {
   // 路由：创建，预览，统计分析，编辑，填写链接
   // Skeleton
+  // 批量删除
   // 提示 message：删除，发布/停止发布，复制链接
   // 填写链接：点击 copy
 
@@ -42,8 +45,18 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
   // TODO 怎么在 loading 的时候 获取 skeletons 的数量
 
   // handle checkbox
-  const checkBoxHandler = (e, id) => {
-    if (e.target.checked) {
+  // const checkBoxHandler = (e, id) => {
+  //   if (e.target.checked) {
+  //     setDeletes([...deletes, id]);
+  //   } else {
+  //     const filtered = deletes.filter((quesId) => quesId !== id);
+  //     setDeletes(filtered);
+  //   }
+  // };
+
+  // handle switch
+  const switchHandler = (checked, evt, id) => {
+    if (checked) {
       setDeletes([...deletes, id]);
     } else {
       const filtered = deletes.filter((quesId) => quesId !== id);
@@ -119,6 +132,12 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                 tags={<Tag color={tagColor}>{statusText}</Tag>}
                 subTitle={description || ""}
                 extra={[
+                  <Switch
+                    key={"4"}
+                    // checkedChildren={<CheckOutlined />}
+                    size={"small"}
+                    onChange={(checked, evt) => switchHandler(checked, evt, id)}
+                  />,
                   <More
                     key={"3"}
                     name={"查看问卷"}
@@ -148,7 +167,8 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                         handler: () => {
                           status === 2
                             ? Modal.confirm({
-                                title: "该问卷正在发布中，请先停止发布再编辑！",
+                                title: `「${questionnaire.title}」正在发布中`,
+                                content: "请先停止发布再进行编辑！",
                                 okText: "确定",
                               })
                             : navigate(`${String(id)}/editing`);
@@ -259,11 +279,11 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                           "还没发布"
                         )}
                       </Descriptions.Item>
+                      {/*<Descriptions.Item>*/}
+                      {/*  <Checkbox onChange={(e) => checkBoxHandler(e, id)} />*/}
+                      {/*</Descriptions.Item>*/}
                     </Descriptions>
                   </div>
-                </div>
-                <div>
-                  <Checkbox onChange={(e) => checkBoxHandler(e, id)} />
                 </div>
               </PageHeader>
             </Container>
