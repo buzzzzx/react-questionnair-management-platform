@@ -34,6 +34,7 @@ export const QuestionnaireListScreen = () => {
       title: `确定删除这${deletes.length}个问卷吗？`,
       content: "点击确定删除",
       okText: "确定",
+      cancelText: "取消",
       onOk() {
         // console.log("删除", deletes.length);
         deleteQuestionnaires({ ids: deletes })

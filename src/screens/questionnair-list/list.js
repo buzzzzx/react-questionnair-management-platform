@@ -41,16 +41,7 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
 
   // TODO 答卷数量实时更新
   // TODO 怎么在 loading 的时候 获取 skeletons 的数量
-
-  // handle checkbox
-  // const checkBoxHandler = (e, id) => {
-  //   if (e.target.checked) {
-  //     setDeletes([...deletes, id]);
-  //   } else {
-  //     const filtered = deletes.filter((quesId) => quesId !== id);
-  //     setDeletes(filtered);
-  //   }
-  // };
+  // TODO switch 意义不明
 
   // handle switch
   const switchHandler = (checked, evt, id) => {
@@ -132,8 +123,8 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                 extra={[
                   <Switch
                     key={"4"}
-                    // checkedChildren={<CheckOutlined />}
                     size={"small"}
+                    checked={deletes.includes(id)}
                     onChange={(checked, evt) => switchHandler(checked, evt, id)}
                   />,
                   <More
@@ -168,6 +159,7 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                                 title: `「${questionnaire.title}」正在发布中`,
                                 content: "请先停止发布再进行编辑！",
                                 okText: "确定",
+                                cancelText: "取消",
                               })
                             : navigate(`${String(id)}/editing`);
                         },
@@ -175,14 +167,22 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                       {
                         name: "删除",
                         handler: () => {
+                          // setDeletes([]);
                           Modal.confirm({
                             title: `确定删除「${questionnaire.title}」吗？`,
                             content: "点击确定删除",
                             okText: "确定",
+                            cancelText: "取消",
                             onOk() {
                               deleteQuestionnaire({ id })
                                 .then(() => {
                                   message.success("删除成功");
+                                  if (deletes.includes(id)) {
+                                    const filtered = deletes.filter(
+                                      (quesId) => quesId !== id
+                                    );
+                                    setDeletes(filtered);
+                                  }
                                 })
                                 .catch((e) => {
                                   message.error("删除失败");
@@ -278,9 +278,6 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                           "还没发布"
                         )}
                       </Descriptions.Item>
-                      {/*<Descriptions.Item>*/}
-                      {/*  <Checkbox onChange={(e) => checkBoxHandler(e, id)} />*/}
-                      {/*</Descriptions.Item>*/}
                     </Descriptions>
                   </div>
                 </div>
@@ -297,7 +294,7 @@ const ListContainer = styled.div`
   width: 100%;
   background-color: #f5f5f5;
   flex: 1;
-  overflow: auto;
+  overflow-x: auto;
   //::-webkit-scrollbar {
   //  display: none;
   //}
