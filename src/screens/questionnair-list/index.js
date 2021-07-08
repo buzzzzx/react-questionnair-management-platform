@@ -1,7 +1,7 @@
 import { ErrorBox, Row, ScreenContainer } from "../../components/lib";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { Button, Divider, Modal } from "antd";
+import { Button, Divider, message, Modal } from "antd";
 import {
   useQuestionnairesQueryKey,
   useQuestionnairesSearchParam,
@@ -25,7 +25,7 @@ export const QuestionnaireListScreen = () => {
   } = useQuestionnaires(useDebounce(params, 300));
 
   const [deletes, setDeletes] = useState([]);
-  const { mutate: deleteQuestionnaires } = useDeleteQuestionnaires(
+  const { mutateAsync: deleteQuestionnaires } = useDeleteQuestionnaires(
     useQuestionnairesQueryKey()
   );
 
@@ -36,7 +36,14 @@ export const QuestionnaireListScreen = () => {
       okText: "确定",
       onOk() {
         // console.log("删除", deletes.length);
-        deleteQuestionnaires({ ids: deletes });
+        deleteQuestionnaires({ ids: deletes })
+          .then(() => {
+            message.success("删除成功");
+            setDeletes([]);
+          })
+          .catch((e) => {
+            message.error("删除失败");
+          });
       },
     });
   };

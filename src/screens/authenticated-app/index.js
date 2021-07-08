@@ -42,7 +42,8 @@ export const AuthenticatedApp = () => {
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;
-  height: 100vh;
+  //height: 100vh;
+  height: auto;
 `;
 
 const Main = styled.main`
