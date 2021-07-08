@@ -1,6 +1,6 @@
-import { Empty, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Empty } from "antd";
 import styled from "@emotion/styled";
+import { CreateButton } from "../../components/create-button";
 
 export const EmptyQuestionnaires = () => {
   return (
@@ -12,9 +12,7 @@ export const EmptyQuestionnaires = () => {
         }}
         description={<span>还没有满足条件的问卷，去创建一个吧～</span>}
       >
-        <Button type={"primary"}>
-          <Link to={"create"}>创建问卷</Link>
-        </Button>
+        <CreateButton />
       </Empty>
     </Container>
   );
@@ -22,5 +20,4 @@ export const EmptyQuestionnaires = () => {
 
 const Container = styled.div`
   padding: 5rem;
-  background-color: #fff;
 `;

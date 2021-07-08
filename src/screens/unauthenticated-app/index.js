@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { LoginScreen } from "./login";
 import { RegisterScreen } from "./register";
-import { ReactComponent as Logo } from "../../assets/logo.svg";
-import left from "../../assets/left.svg";
-import right from "../../assets/right.svg";
+import { ReactComponent as Logo } from "../../assets/bluecat.svg";
 import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
 import { ErrorBox, Row } from "../../components/lib";
 import { Navigate, Route, Routes } from "react-router";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Background } from "../../components/background";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -21,8 +20,8 @@ export const UnauthenticatedApp = () => {
         <title>{isRegister ? "注册" : "登录"}</title>
       </Helmet>
       <Header>
-        <Logo width={"7rem"} />
-        <div>欢迎来到问卷管理平台👏</div>
+        <Logo height={"7rem"} width={"7rem"} />
+        <div>欢迎来到问卷喵👏</div>
       </Header>
       <Background />
       <ShadowCard>
@@ -56,18 +55,6 @@ const Title = styled.h2`
 const Header = styled(Row)`
   padding: 3rem 0;
   font-size: 2rem;
-`;
-
-const Background = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: left bottom, right bottom;
-  background-size: calc(((100vw - 40rem) / 2) - 3.2rem),
-    calc(((100vw - 40rem) / 2) - 3.2rem), cover;
-  background-image: url(${left}), url(${right});
 `;
 
 const ShadowCard = styled(Card)`

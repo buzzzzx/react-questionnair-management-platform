@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Row } from "../../components/lib";
-import { ReactComponent as Logo } from "../../assets/logo.svg";
+import { ReactComponent as Logo } from "../../assets/bluecat.svg";
 import { User } from "./user";
 import { QuestionnairesPopover } from "./questionnaires-popover";
 import { resetRoute } from "../../utils";
@@ -10,8 +10,8 @@ export const PageHeader = () => {
     <Header between={true}>
       <HeaderLeft gap={true}>
         <LogoTitle onClick={resetRoute}>
-          <Logo width={"7rem"} />
-          <h4 style={{ fontWeight: "bolder" }}>问卷管理平台</h4>
+          <Logo height={"6rem"} width={"6rem"} />
+          <h4 style={{ fontWeight: "bolder" }}>问卷喵</h4>
         </LogoTitle>
         <QuestionnairesPopover />
       </HeaderLeft>
@@ -32,6 +32,7 @@ const HeaderLeft = styled(Row)``;
 
 const LogoTitle = styled(Row)`
   font-size: 2rem;
+  cursor: pointer;
 `;
 
 const HeaderRight = styled.div``;

@@ -295,11 +295,10 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
 };
 
 const ListContainer = styled.div`
-  height: auto;
   width: 100%;
   background-color: #f5f5f5;
   flex: 1;
-  overflow-x: auto;
+  overflow: auto;
   //::-webkit-scrollbar {
   //  display: none;
   //}

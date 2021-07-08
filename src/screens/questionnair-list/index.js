@@ -11,9 +11,9 @@ import {
   useQuestionnaires,
 } from "../../utils/questionnaire";
 import { useDebounce } from "../../utils";
-import { Link } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { CreateButton } from "../../components/create-button";
 
 export const QuestionnaireListScreen = () => {
   const [params, setParams] = useQuestionnairesSearchParam();
@@ -56,9 +56,10 @@ export const QuestionnaireListScreen = () => {
       >
         <Row gap={true}>
           <h1>问卷列表</h1>
-          <Button type={"primary"}>
-            <Link to={"create"}>创建问卷</Link>
-          </Button>
+          {/*<Button type={"primary"}>*/}
+          {/*  <Link to={"create"}>创建问卷</Link>*/}
+          {/*</Button>*/}
+          <CreateButton />
           {deletes.length ? (
             <Button onClick={deleteHandler} icon={<DeleteOutlined />} danger>
               {`删除选中 (${deletes.length})`}
