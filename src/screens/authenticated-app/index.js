@@ -3,14 +3,16 @@ import { PageHeader } from "./page-header";
 import { QuestionnaireListScreen } from "../questionnair-list";
 import { Navigate, Route, Routes } from "react-router";
 import { Questionnaire } from "../questionnaire";
+import { Helmet } from "react-helmet";
 
 export const AuthenticatedApp = () => {
-  // TODO 标题
-
-  // TODO 路由：创建问卷，编辑问卷，预览，统计分析
+  // 路由：创建问卷，编辑问卷，预览，统计分析
 
   return (
     <Container>
+      <Helmet>
+        <title>我的问卷</title>
+      </Helmet>
       <PageHeader />
       <Main>
         <Routes>

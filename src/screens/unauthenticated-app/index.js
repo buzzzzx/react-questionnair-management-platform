@@ -9,14 +9,17 @@ import { Button, Card, Divider } from "antd";
 import { ErrorBox, Row } from "../../components/lib";
 import { Navigate, Route, Routes } from "react-router";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export const UnauthenticatedApp = () => {
-  // TODO 标题 helmet
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState(null);
 
   return (
     <Container>
+      <Helmet>
+        <title>{isRegister ? "注册" : "登录"}</title>
+      </Helmet>
       <Header>
         <Logo width={"7rem"} />
         <div>欢迎来到问卷管理平台👏</div>
