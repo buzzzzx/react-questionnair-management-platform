@@ -67,6 +67,18 @@ export const useDeleteQuestionnaire = (queryKey) => {
   );
 };
 
+export const useDeleteQuestionnaires = (queryKey) => {
+  const client = useHttp();
+  return useMutation(
+    (params) =>
+      client(`questionnaires/`, {
+        data: params,
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
+  );
+};
+
 export const useQuestionnaire = (id) => {
   const client = useHttp();
 
