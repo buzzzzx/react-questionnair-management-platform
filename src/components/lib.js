@@ -36,7 +36,7 @@ export const ScreenContainer = styled.div`
 `;
 
 const isError = (value) => {
-  return Object.prototype.toString.call(value) === "[object Error]";
+  return value?.message;
 };
 
 export const ErrorBox = ({ error }) => {

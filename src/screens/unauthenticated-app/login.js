@@ -11,7 +11,6 @@ export const LoginScreen = ({ onError }) => {
     try {
       await run(login({ username, password }));
     } catch (e) {
-      // TODO error 不显示出来
       onError(e);
     }
   };
