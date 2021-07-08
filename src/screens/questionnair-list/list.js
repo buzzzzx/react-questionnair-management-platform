@@ -5,7 +5,6 @@ import {
   Statistic,
   Tag,
   Modal,
-  Checkbox,
   Tooltip,
   message,
   Switch,
@@ -27,7 +26,6 @@ import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   RiseOutlined,
-  CheckOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
@@ -269,6 +267,7 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                       <Descriptions.Item label="填写链接">
                         {openCode ? (
                           <Tooltip placement="topLeft" title={"点击复制"}>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <a
                               onClick={(event) => copyHandler(event, openCode)}
                             >

@@ -56,9 +56,6 @@ export const QuestionnaireListScreen = () => {
       >
         <Row gap={true}>
           <h1>问卷列表</h1>
-          {/*<Button type={"primary"}>*/}
-          {/*  <Link to={"create"}>创建问卷</Link>*/}
-          {/*</Button>*/}
           <CreateButton />
           {deletes.length ? (
             <Button onClick={deleteHandler} icon={<DeleteOutlined />} danger>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { LoginScreen } from "./login";
 import { RegisterScreen } from "./register";
-import { ReactComponent as Logo } from "../../assets/bluecat.svg";
 import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
 import { ErrorBox, Row } from "../../components/lib";
@@ -9,6 +8,7 @@ import { Navigate, Route, Routes } from "react-router";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Background } from "../../components/background";
+import { Logo } from "../../components/logo";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -20,7 +20,7 @@ export const UnauthenticatedApp = () => {
         <title>{isRegister ? "注册" : "登录"}</title>
       </Helmet>
       <Header>
-        <Logo height={"7rem"} width={"7rem"} />
+        <Logo />
         <div>欢迎来到问卷喵👏</div>
       </Header>
       <Background />
