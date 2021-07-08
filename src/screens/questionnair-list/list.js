@@ -169,14 +169,14 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                         handler: () => {
                           // setDeletes([]);
                           Modal.confirm({
-                            title: `确定删除「${questionnaire.title}」吗？`,
+                            title: `确定删除「${title}」吗？`,
                             content: "点击确定删除",
                             okText: "确定",
                             cancelText: "取消",
                             onOk() {
                               deleteQuestionnaire({ id })
                                 .then(() => {
-                                  message.success("删除成功");
+                                  message.success(`删除「${title}」成功`);
                                   if (deletes.includes(id)) {
                                     const filtered = deletes.filter(
                                       (quesId) => quesId !== id
@@ -185,7 +185,7 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                                   }
                                 })
                                 .catch((e) => {
-                                  message.error("删除失败");
+                                  message.error(`删除「${title}」成功`);
                                 });
                             },
                           });
@@ -210,12 +210,20 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
                       })
                         .then(() => {
                           message.success(
-                            `${status === 1 ? "发布成功" : "停止发布成功"}`
+                            `${
+                              status === 1
+                                ? `发布「${title}」成功`
+                                : `停止发布「${title}」成功`
+                            }`
                           );
                         })
                         .catch((e) => {
                           message.error(
-                            `${status === 1 ? "发布失败" : "停止发布失败"}`
+                            `${
+                              status === 1
+                                ? `发布「${title}」失败`
+                                : `停止发布「${title}」失败`
+                            }`
                           );
                         });
                     }}
@@ -301,5 +309,5 @@ const ListContainer = styled.div`
 `;
 
 const Container = styled.div`
-  margin: 2rem 2rem 2rem 2rem;
+  margin: 2rem 1.5rem 2rem 1.5rem;
 `;

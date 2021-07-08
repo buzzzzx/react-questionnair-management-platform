@@ -31,7 +31,7 @@ export const QuestionnaireListScreen = () => {
 
   const deleteHandler = () => {
     Modal.confirm({
-      title: `确定删除这${deletes.length}个问卷吗？`,
+      title: `确定删除这 ${deletes.length} 个问卷吗？`,
       content: "点击确定删除",
       okText: "确定",
       cancelText: "取消",
