@@ -29,6 +29,9 @@ export const QuestionnaireListScreen = () => {
     useQuestionnairesQueryKey()
   );
 
+  const [hoverQuestionnaire, setHoverQuestionnaire] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+
   const deleteHandler = () => {
     Modal.confirm({
       title: `确定删除这 ${deletes.length} 个问卷吗？`,
@@ -73,6 +76,10 @@ export const QuestionnaireListScreen = () => {
       <List
         loading={isLoading}
         list={list}
+        hoverQuestionnaire={hoverQuestionnaire}
+        setHoverQuestionnaire={setHoverQuestionnaire}
+        showAll={showAll}
+        setShowAll={setShowAll}
         deletes={deletes}
         setDeletes={setDeletes}
       />

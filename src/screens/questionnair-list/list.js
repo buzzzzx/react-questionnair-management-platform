@@ -8,6 +8,7 @@ import {
   Tooltip,
   message,
   Switch,
+  Checkbox,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
@@ -29,10 +30,21 @@ import {
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
+import { useEffect, useState } from "react";
 
 const apiUrl = "http://121.36.47.113:3000";
 
-export const List = ({ list, loading, deletes, setDeletes }) => {
+/** @jsxImportSource @emotion/react */
+export const List = ({
+  list,
+  loading,
+  deletes,
+  setDeletes,
+  hoverQuestionnaire,
+  setHoverQuestionnaire,
+  showAll,
+  setShowAll,
+}) => {
   // 路由：创建，预览，统计分析，编辑，填写链接
   // Skeleton
   // 批量删除
@@ -42,6 +54,32 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
   // TODO 答卷数量实时更新
   // TODO 怎么在 loading 的时候 获取 skeletons 的数量
   // TODO switch 意义不明
+
+  useEffect(() => {
+    if (deletes.length !== 0) {
+      setShowAll(true);
+    } else {
+      setShowAll(false);
+    }
+  }, [deletes]);
+
+  const mouseEnterHandler = (id) => {
+    setHoverQuestionnaire(id);
+  };
+
+  const mouseLeaveHandler = (id) => {
+    setHoverQuestionnaire(null);
+  };
+
+  // handle checkbox
+  // const checkBoxHandler = (e, id) => {
+  //   if (e.target.checked) {
+  //     setDeletes([...deletes, id]);
+  //   } else {
+  //     const filtered = deletes.filter((quesId) => quesId !== id);
+  //     setDeletes(filtered);
+  //   }
+  // };
 
   // handle switch
   const switchHandler = (checked, evt, id) => {
@@ -113,20 +151,32 @@ export const List = ({ list, loading, deletes, setDeletes }) => {
           }
 
           return (
-            <Container>
+            <Container
+              onMouseEnter={() => mouseEnterHandler(id)}
+              onMouseLeave={() => mouseLeaveHandler(id)}
+            >
               <PageHeader
+                css={{
+                  "&:hover": {
+                    backgroundColor: "#FDF5E6",
+                  },
+                }}
                 key={index}
                 ghost={false}
                 title={title}
                 tags={<Tag color={tagColor}>{statusText}</Tag>}
                 subTitle={description || ""}
                 extra={[
-                  <Switch
-                    key={"4"}
-                    size={"small"}
-                    checked={deletes.includes(id)}
-                    onChange={(checked, evt) => switchHandler(checked, evt, id)}
-                  />,
+                  showAll || hoverQuestionnaire === id ? (
+                    <Switch
+                      key={"4"}
+                      size={"small"}
+                      checked={deletes.includes(id)}
+                      onChange={(checked, evt) =>
+                        switchHandler(checked, evt, id)
+                      }
+                    />
+                  ) : null,
                   <More
                     key={"3"}
                     name={"查看问卷"}
