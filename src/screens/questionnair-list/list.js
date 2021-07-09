@@ -8,7 +8,6 @@ import {
   Tooltip,
   message,
   Switch,
-  Checkbox,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
@@ -49,8 +48,7 @@ export const List = ({
   // 提示 message：删除，发布/停止发布，复制链接
   // 填写链接：点击 copy
 
-  // TODO 答卷数量实时更新
-  // TODO 怎么在 loading 的时候 获取 skeletons 的数量
+  // TODO 已结束状态
 
   useEffect(() => {
     if (deletes.length !== 0) {
@@ -156,7 +154,8 @@ export const List = ({
               <PageHeader
                 css={{
                   "&:hover": {
-                    backgroundColor: "#FDF5E6",
+                    // backgroundColor: "#F5F5DC",
+                    backgroundColor: "#EEE9E9",
                   },
                 }}
                 key={index}

@@ -48,7 +48,7 @@ export const useAddQuestionnaire = (queryKey) => {
 
   return useMutation(
     (param) =>
-      client("questionnaires", {
+      client("questionnaires/create", {
         data: param,
         method: "POST",
       }),
