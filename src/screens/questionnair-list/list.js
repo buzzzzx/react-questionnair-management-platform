@@ -32,8 +32,6 @@ import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
 import { useEffect, useState } from "react";
 
-const apiUrl = "http://121.36.47.113:3000";
-
 /** @jsxImportSource @emotion/react */
 export const List = ({
   list,
@@ -53,7 +51,6 @@ export const List = ({
 
   // TODO 答卷数量实时更新
   // TODO 怎么在 loading 的时候 获取 skeletons 的数量
-  // TODO switch 意义不明
 
   useEffect(() => {
     if (deletes.length !== 0) {
@@ -93,7 +90,8 @@ export const List = ({
 
   // 点击填写链接 copy to clipboard
   const copyHandler = (e, openCode) => {
-    const copyLink = `${apiUrl}/write/${openCode}`;
+    // FIXME 网站链接
+    const copyLink = `http://localhost:3000/fill/${openCode}`;
     if (copy(copyLink)) {
       message.success("复制成功 🙌");
     } else {

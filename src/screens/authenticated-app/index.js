@@ -4,6 +4,9 @@ import { QuestionnaireListScreen } from "../questionnair-list";
 import { Navigate, Route, Routes } from "react-router";
 import { Questionnaire } from "../questionnaire";
 import { Helmet } from "react-helmet";
+import { QuestionnairePreview } from "../questionnaire-preview";
+import { QuestionnaireAnalysis } from "../questionnaire-analysis";
+import { QuestionnaireFill } from "../questionnaire-fill";
 
 export const AuthenticatedApp = () => {
   // 路由：创建问卷，编辑问卷，预览，统计分析
@@ -27,13 +30,13 @@ export const AuthenticatedApp = () => {
           />
           <Route
             path={"/questionnaires/:id/preview"}
-            element={<Questionnaire />}
+            element={<QuestionnairePreview />}
           />
           <Route
             path={"/questionnaires/:id/analysis"}
-            element={<Questionnaire />}
+            element={<QuestionnaireAnalysis />}
           />
-          <Route path={"/write/*"} element={<Questionnaire />} />
+          <Route path={"/fill/*"} element={<QuestionnaireFill />} />
           <Navigate to={"/questionnaires"} />
         </Routes>
       </Main>
