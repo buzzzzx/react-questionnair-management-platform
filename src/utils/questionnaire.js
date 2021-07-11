@@ -1,4 +1,4 @@
-import { useHttp } from "./http";
+import { http, useHttp } from "./http";
 import { useQuery, useMutation } from "react-query";
 import { cleanObject } from "./index";
 import {
@@ -114,14 +114,16 @@ export const useAnalysisQuestionnaire = (id) => {
   );
 };
 
-// TODO 不需要做鉴权
+/**
+ * 请求填写问卷的问卷信息，不需要做鉴权
+ * @param openId
+ * @return {UseQueryResult<unknown, unknown>}
+ */
 export const useFillQuestionnaire = (openId) => {
-  const client = useHttp();
-
   return useQuery(
     ["questionnaire", { openId }],
     () =>
-      client(`questionnaires/${openId}/write`, {
+      http(`questionnaires/${openId}/write`, {
         method: "GET",
       }),
     {
