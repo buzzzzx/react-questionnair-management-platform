@@ -1,12 +1,13 @@
 import {
   Button,
   Descriptions,
-  Divider,
   PageHeader,
   Statistic,
   Tag,
   Modal,
-  Spin,
+  Tooltip,
+  message,
+  Switch,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
@@ -18,33 +19,99 @@ import { useQuestionnairesQueryKey } from "./util";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { EmptyQuestionnaires } from "./empty";
+import { ButtonNoPadding } from "../../components/lib";
+import {
+  FolderViewOutlined,
+  PieChartOutlined,
+  PlayCircleOutlined,
+  PauseCircleOutlined,
+  RiseOutlined,
+} from "@ant-design/icons";
+import { PageHeaderSkeletons } from "./pageheader-skeleton";
+import copy from "copy-to-clipboard";
+import { useEffect, useState } from "react";
 
-export const List = ({ list, loading }) => {
-  // TODO 路由：创建，预览，统计分析，编辑，填写链接
-  // TODO 答卷数量实时更新
-  // TODO 批量删除
+/** @jsxImportSource @emotion/react */
+export const List = ({
+  list,
+  loading,
+  deletes,
+  setDeletes,
+  hoverQuestionnaire,
+  setHoverQuestionnaire,
+  showAll,
+  setShowAll,
+}) => {
+  // 路由：创建，预览，统计分析，编辑，填写链接
+  // Skeleton
+  // 批量删除
+  // 提示 message：删除，发布/停止发布，复制链接
+  // 填写链接：点击 copy
+
+  // TODO 已结束状态
+
+  useEffect(() => {
+    if (deletes.length !== 0) {
+      setShowAll(true);
+    } else {
+      setShowAll(false);
+    }
+  }, [deletes]);
+
+  const mouseEnterHandler = (id) => {
+    setHoverQuestionnaire(id);
+  };
+
+  const mouseLeaveHandler = (id) => {
+    setHoverQuestionnaire(null);
+  };
+
+  // handle checkbox
+  // const checkBoxHandler = (e, id) => {
+  //   if (e.target.checked) {
+  //     setDeletes([...deletes, id]);
+  //   } else {
+  //     const filtered = deletes.filter((quesId) => quesId !== id);
+  //     setDeletes(filtered);
+  //   }
+  // };
+
+  // handle switch
+  const switchHandler = (checked, evt, id) => {
+    if (checked) {
+      setDeletes([...deletes, id]);
+    } else {
+      const filtered = deletes.filter((quesId) => quesId !== id);
+      setDeletes(filtered);
+    }
+  };
+
+  // 点击填写链接 copy to clipboard
+  const copyHandler = (e, openCode) => {
+    // FIXME 网站链接
+    const copyLink = `http://localhost:3000/fill/${openCode}`;
+    if (copy(copyLink)) {
+      message.success("复制成功 🙌");
+    } else {
+      message.error("复制失败");
+    }
+  };
 
   // 删除
-  const { mutate: deleteQuestionnaire } = useDeleteQuestionnaire(
+  const { mutateAsync: deleteQuestionnaire } = useDeleteQuestionnaire(
     useQuestionnairesQueryKey()
   );
 
   // 发布（停止发布）
-  const { mutateAsync: editRelease } = useEditReleaseQuestionnaire(
-    useQuestionnairesQueryKey()
-  );
+  const { mutateAsync: editRelease, isLoading: releaseLoading } =
+    useEditReleaseQuestionnaire(useQuestionnairesQueryKey());
 
   const navigate = useNavigate();
 
   return (
     <ListContainer>
       {loading ? (
-        <Spin
-          style={{
-            margin: "70px",
-          }}
-          size={"small"}
-        />
+        <PageHeaderSkeletons len={list.length || 2} />
       ) : list.length === 0 ? (
         <EmptyQuestionnaires />
       ) : (
@@ -60,15 +127,19 @@ export const List = ({ list, loading }) => {
             openCode,
           } = questionnaire;
 
-          let tagColor, statusText, buttonText;
+          let tagColor, statusText, buttonText, releaseIcon, releaseColor;
           if (status === 1) {
             tagColor = "blue";
             statusText = "未发布";
             buttonText = "发布";
+            releaseIcon = <PlayCircleOutlined />;
+            releaseColor = "#1E90FF";
           } else if (status === 2) {
             tagColor = "green";
             statusText = "发布中";
-            buttonText = "停止发布";
+            buttonText = "停止";
+            releaseIcon = <PauseCircleOutlined />;
+            releaseColor = "#2E8B57";
           } else {
             tagColor = "yellow";
             statusText = "已结束";
@@ -76,19 +147,51 @@ export const List = ({ list, loading }) => {
           }
 
           return (
-            <>
+            <Container
+              onMouseEnter={() => mouseEnterHandler(id)}
+              onMouseLeave={() => mouseLeaveHandler(id)}
+            >
               <PageHeader
+                css={{
+                  "&:hover": {
+                    // backgroundColor: "#F5F5DC",
+                    backgroundColor: "#EEE9E9",
+                  },
+                }}
                 key={index}
+                ghost={false}
                 title={title}
                 tags={<Tag color={tagColor}>{statusText}</Tag>}
                 subTitle={description || ""}
                 extra={[
+                  showAll || hoverQuestionnaire === id ? (
+                    <Switch
+                      key={"4"}
+                      size={"small"}
+                      checked={deletes.includes(id)}
+                      onChange={(checked, evt) =>
+                        switchHandler(checked, evt, id)
+                      }
+                    />
+                  ) : null,
                   <More
                     key={"3"}
                     name={"查看问卷"}
                     operations={[
-                      <Link to={`${String(id)}/preview`}>预览</Link>,
-                      <Link to={`${String(id)}/analysis`}>统计分析</Link>,
+                      <ButtonNoPadding
+                        icon={<FolderViewOutlined />}
+                        type={"link"}
+                      >
+                        <span> </span>
+                        <Link to={`${String(id)}/preview`}>预览</Link>
+                      </ButtonNoPadding>,
+                      <ButtonNoPadding
+                        icon={<PieChartOutlined />}
+                        type={"link"}
+                      >
+                        <span> </span>
+                        <Link to={`${String(id)}/analysis`}>统计分析</Link>
+                      </ButtonNoPadding>,
                     ]}
                   />,
                   <More
@@ -100,8 +203,10 @@ export const List = ({ list, loading }) => {
                         handler: () => {
                           status === 2
                             ? Modal.confirm({
-                                title: "该问卷正在发布中，请先停止发布再编辑！",
+                                title: `「${questionnaire.title}」正在发布中`,
+                                content: "请先停止发布再进行编辑！",
                                 okText: "确定",
+                                cancelText: "取消",
                               })
                             : navigate(`${String(id)}/editing`);
                         },
@@ -109,12 +214,26 @@ export const List = ({ list, loading }) => {
                       {
                         name: "删除",
                         handler: () => {
+                          // setDeletes([]);
                           Modal.confirm({
-                            title: "确定删除这个问卷吗？",
+                            title: `确定删除「${title}」吗？`,
                             content: "点击确定删除",
                             okText: "确定",
+                            cancelText: "取消",
                             onOk() {
-                              deleteQuestionnaire({ id });
+                              deleteQuestionnaire({ id })
+                                .then(() => {
+                                  message.success(`删除「${title}」成功`);
+                                  if (deletes.includes(id)) {
+                                    const filtered = deletes.filter(
+                                      (quesId) => quesId !== id
+                                    );
+                                    setDeletes(filtered);
+                                  }
+                                })
+                                .catch((e) => {
+                                  message.error(`删除「${title}」成功`);
+                                });
                             },
                           });
                         },
@@ -124,11 +243,36 @@ export const List = ({ list, loading }) => {
                   <Button
                     key="1"
                     type="primary"
+                    shape={"round"}
+                    icon={releaseIcon}
+                    loading={releaseLoading}
+                    style={{
+                      backgroundColor: releaseColor,
+                      borderColor: releaseColor,
+                    }}
                     onClick={() => {
                       editRelease({
                         id: questionnaire.id,
                         status: status === 1 ? 2 : 1,
-                      });
+                      })
+                        .then(() => {
+                          message.success(
+                            `${
+                              status === 1
+                                ? `发布「${title}」成功`
+                                : `停止发布「${title}」成功`
+                            }`
+                          );
+                        })
+                        .catch((e) => {
+                          message.error(
+                            `${
+                              status === 1
+                                ? `发布「${title}」失败`
+                                : `停止发布「${title}」失败`
+                            }`
+                          );
+                        });
                     }}
                   >
                     {buttonText}
@@ -143,18 +287,18 @@ export const List = ({ list, loading }) => {
                         width: "max-content",
                       }}
                     >
-                      <Statistic
-                        style={{
-                          marginRight: 32,
-                        }}
-                        title="填写链接"
-                        value={statusText}
-                      />
+                      {/*<Statistic*/}
+                      {/*  style={{*/}
+                      {/*    marginRight: 32,*/}
+                      {/*  }}*/}
+                      {/*  title="填写链接"*/}
+                      {/*  value={statusText}*/}
+                      {/*/>*/}
                       <Statistic
                         title="答卷数量"
                         value={answerCount}
-                        valueStyle={{ color: "#3f8600" }}
-                        // prefix={<CheckCircleOutlined />}
+                        // valueStyle={{ color: "#3f8600" }}
+                        prefix={<RiseOutlined />}
                         style={{
                           marginRight: 32,
                         }}
@@ -177,7 +321,14 @@ export const List = ({ list, loading }) => {
                       </Descriptions.Item>
                       <Descriptions.Item label="填写链接">
                         {openCode ? (
-                          <a href={`/write/${openCode}`}>Click</a>
+                          <Tooltip placement="topLeft" title={"点击复制"}>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a
+                              onClick={(event) => copyHandler(event, openCode)}
+                            >
+                              Click
+                            </a>
+                          </Tooltip>
                         ) : (
                           "还没发布"
                         )}
@@ -185,19 +336,18 @@ export const List = ({ list, loading }) => {
                     </Descriptions>
                   </div>
                 </div>
-                {/*<br />*/}
               </PageHeader>
-              {index !== list.length - 1 ? <Divider dashed={true} /> : null}
-            </>
+            </Container>
           );
         })
       )}
-      <Divider />
     </ListContainer>
   );
 };
 
 const ListContainer = styled.div`
+  width: 100%;
+  background-color: #f5f5f5;
   flex: 1;
   overflow-x: auto;
   //::-webkit-scrollbar {
@@ -205,24 +355,6 @@ const ListContainer = styled.div`
   //}
 `;
 
-// const IconLink = ({ src, text }) => (
-//   <a className="example-link">
-//     <img className="example-link-icon" src={src} alt={text} />
-//     {text}
-//   </a>
-// );
-
-//<div>
-//  <IconLink
-//    src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg"
-//    text="Quick Start"
-//  />
-//  <IconLink
-//    src="https://gw.alipayobjects.com/zos/rmsportal/NbuDUAuBlIApFuDvWiND.svg"
-//    text=" Product Info"
-//  />
-//  <IconLink
-//    src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg"
-//    text="Product Doc"
-//  />
-//</div>
+const Container = styled.div`
+  margin: 2rem 1.5rem 2rem 1.5rem;
+`;

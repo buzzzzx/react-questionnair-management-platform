@@ -11,7 +11,6 @@ export const LoginScreen = ({ onError }) => {
     try {
       await run(login({ username, password }));
     } catch (e) {
-      // TODO error 不显示出来
       onError(e);
     }
   };
@@ -22,13 +21,23 @@ export const LoginScreen = ({ onError }) => {
         name={"username"}
         rules={[{ required: true, message: "请输入用户名" }]}
       >
-        <Input placeholder={"用户名"} type="text" id="username" />
+        <Input
+          onChange={() => onError(null)}
+          placeholder={"用户名"}
+          type="text"
+          id="username"
+        />
       </Form.Item>
       <Form.Item
         name={"password"}
         rules={[{ required: true, message: "请输入密码" }]}
       >
-        <Input placeholder={"密码"} type="password" id="password" />
+        <Input
+          onChange={() => onError(null)}
+          placeholder={"密码"}
+          type="password"
+          id="password"
+        />
       </Form.Item>
       <Form.Item>
         <LongButton loading={isLoading} type="primary" htmlType={"submit"}>

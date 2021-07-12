@@ -67,6 +67,18 @@ export const useDeleteQuestionnaire = (queryKey) => {
   );
 };
 
+export const useDeleteQuestionnaires = (queryKey) => {
+  const client = useHttp();
+  return useMutation(
+    (params) =>
+      client(`questionnaires/`, {
+        data: params,
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
+  );
+};
+
 export const useQuestionnaire = (id) => {
   const client = useHttp();
 
@@ -78,6 +90,42 @@ export const useQuestionnaire = (id) => {
       }),
     {
       enabled: !!id,
+    }
+  );
+};
+
+/**
+ * 获得问卷的统计分析信息
+ * @param id
+ * @return {UseQueryResult<unknown, unknown>}
+ */
+export const useAnalysisQuestionnaire = (id) => {
+  const client = useHttp();
+
+  return useQuery(
+    ["questionnaire", { id }],
+    () =>
+      client(`questionnaires/${id}/analysis`, {
+        method: "GET",
+      }),
+    {
+      enabled: !!id,
+    }
+  );
+};
+
+// TODO 不需要做鉴权
+export const useFillQuestionnaire = (openId) => {
+  const client = useHttp();
+
+  return useQuery(
+    ["questionnaire", { openId }],
+    () =>
+      client(`questionnaires/${openId}/write`, {
+        method: "GET",
+      }),
+    {
+      enabled: !!openId,
     }
   );
 };

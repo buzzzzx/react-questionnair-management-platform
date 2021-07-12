@@ -26,7 +26,12 @@ export const RegisterScreen = ({ onError }) => {
         name={"username"}
         rules={[{ required: true, message: "请输入用户名" }]}
       >
-        <Input placeholder={"用户名"} type="text" id="username" />
+        <Input
+          onChange={() => onError(null)}
+          placeholder={"用户名"}
+          type="text"
+          id="username"
+        />
       </Form.Item>
       <Form.Item
         name={"password"}
