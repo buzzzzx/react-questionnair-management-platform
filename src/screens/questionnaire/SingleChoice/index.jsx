@@ -7,6 +7,8 @@ import {
 } from "@ant-design/icons";
 import { Input, Checkbox, Button, Form } from "antd";
 import { useState } from "react";
+import arrayMove from "array-move";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 export const SingleChoice = (props) => {
   const {
@@ -24,7 +26,9 @@ export const SingleChoice = (props) => {
   const [form] = Form.useForm();
   const [title, setTitle] = useState(currQues.title);
   const [remarks, setRemarks] = useState(currQues.remarks);
-  const [option, setChoiceOption] = useState(currQues.option);
+  const [option, setChoiceOption] = useState(
+    JSON.parse(JSON.stringify(currQues.option))
+  );
   const [isnecessary, setIsNecessary] = useState(currQues.isnecessary);
   const [isNote, setIsNote] = useState(
     currQues.remarks === null ? false : true
@@ -35,6 +39,12 @@ export const SingleChoice = (props) => {
       36
     );
   };
+
+  function generateKey() {
+    return Number(Math.random().toString().substr(3, 5) + Date.now()).toString(
+      36
+    );
+  }
 
   const add = () => {
     let newChoices = [...option, { no: option_no(), text: "" }];
@@ -49,17 +59,26 @@ export const SingleChoice = (props) => {
   };
 
   const onChange = (no, e) => {
-    const newChoiceItems = JSON.parse(JSON.stringify(option));
-    console.log(newChoiceItems);
-    const choice = newChoiceItems.find((item) => item.no === no);
+    const choice = option.find((item) => item.no === no);
     choice["text"] = e.target.value;
-    console.log(option);
-    setChoiceOption(newChoiceItems);
   };
 
-  const choices = option.map((item) => {
+  const onBlur = () => {
+    setChoiceOption(option);
+  };
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    console.log(oldIndex, newIndex);
+    setChoiceOption(arrayMove(option, oldIndex, newIndex));
+  };
+
+  const SortableList = SortableContainer(({ children }) => {
+    return <ul>{children}</ul>;
+  });
+
+  const SortableItem = SortableElement(({ item }) => {
     return (
-      <Form.Item key={item.no} name={["option", item.no, "text"]}>
+      <Form.Item name={["option", item.no, "text"]}>
         <EditorRow>
           <EditorRowTitle>
             <UnorderedListOutlined></UnorderedListOutlined>
@@ -69,6 +88,9 @@ export const SingleChoice = (props) => {
               defaultValue={item.text}
               onChange={(e) => {
                 onChange(item.no, e);
+              }}
+              onBlur={() => {
+                onBlur();
               }}
             />
             <Button
@@ -117,9 +139,6 @@ export const SingleChoice = (props) => {
       setEditorStatus("NotEdit");
       setEditorType(null);
     }
-
-    console.log("创建的单选题为", questionItem);
-    console.log("创建后的问卷列表为", questionList);
   };
 
   const cancel = () => {
@@ -129,7 +148,6 @@ export const SingleChoice = (props) => {
       setQuestionList(questionList);
       setIsUpdate(false);
     }
-    console.log("点击取消后的questionlist", questionList);
   };
 
   return (
@@ -156,7 +174,7 @@ export const SingleChoice = (props) => {
           </EditorRow>
         </Form.Item>
 
-        <Form.Item name="note">
+        <Form.Item name="remarks">
           <EditorRow>
             <EditorRowContent>
               <EditorCheckbox>
@@ -199,7 +217,13 @@ export const SingleChoice = (props) => {
           </EditorRow>
         </Form.Item>
 
-        <Form.Item>{choices}</Form.Item>
+        <Form.Item>
+          <SortableList onSortEnd={onSortEnd} distance={10}>
+            {option.map((item, index) => (
+              <SortableItem key={generateKey()} index={index} item={item} />
+            ))}
+          </SortableList>
+        </Form.Item>
 
         <Form.Item>
           <EditorRow>

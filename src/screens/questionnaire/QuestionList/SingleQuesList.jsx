@@ -1,4 +1,4 @@
-import { Radio, Space, Divider } from "antd";
+import { Radio, Space, Divider, Modal } from "antd";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -33,11 +33,18 @@ export const SingleQuesList = (props) => {
   const option_id = next_id();
 
   const deleteQues = () => {
-    const newQuestionList = questionList.filter(
-      (ques) => ques !== questionItem
-    );
-    console.log("删除问题成功");
-    setQuestionList(newQuestionList);
+    Modal.confirm({
+      title: "确定删除这个问题吗",
+      content: "点击确定删除这个问题",
+      okText: "确定",
+      cancelText: "取消",
+      onOk() {
+        const newQuestionList = questionList.filter(
+          (ques) => ques !== questionItem
+        );
+        setQuestionList(newQuestionList);
+      },
+    });
   };
 
   if (isEdit === false) {
@@ -86,6 +93,7 @@ export const SingleQuesList = (props) => {
                     <FormOutlined
                       onClick={() => {
                         setIsEdit(true);
+                        console.log("当前进入编辑状态", isEdit);
                       }}
                     />
                   </SubjectBarButton>
@@ -103,6 +111,7 @@ export const SingleQuesList = (props) => {
       </>
     );
   } else {
+    console.log("开始编辑问题");
     return (
       <SingleChoice
         questionList={questionList}
@@ -167,7 +176,7 @@ const SubjectMask = styled.div`
 `;
 
 const SubjectControlBar = styled.div`
-  width: 48px;
+  width: 80px;
   background: #ededed;
   position: absolute;
   top: 0;
@@ -183,7 +192,10 @@ const SubjectBarButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+  font-size: x-large;
+  color: #0052cc;
 `;
 
 const SubjectRowRequire = styled.span`

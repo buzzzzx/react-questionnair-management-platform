@@ -5,7 +5,8 @@ import {
   CodeSandboxCircleFilled,
   MinusSquareOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Menu, Modal } from "antd";
+import { Content } from "antd/lib/layout/layout";
 
 export const LeftSide = (props) => {
   const { editorStatus, setEditorStatus, editorType, setEditorType } = props;
@@ -22,7 +23,11 @@ export const LeftSide = (props) => {
               setEditorType("SingleChoice");
               setEditorStatus("Edit");
             } else {
-              alert("当前还有一个问题未编辑完哦!");
+              Modal.info({
+                title: "当前还有一个问题未编辑完哦",
+                content: "点击确定，继续编辑已有问题",
+                okText: "确定",
+              });
             }
           }}
         >
@@ -36,7 +41,11 @@ export const LeftSide = (props) => {
               setEditorType("MultipleChoice");
               setEditorStatus("Edit");
             } else {
-              alert("当前还有一个问题未编辑完哦!");
+              Modal.info({
+                title: "当前还有一个问题未编辑完哦",
+                content: "点击确定，继续编辑已有问题",
+                okText: "确定",
+              });
             }
           }}
         >
@@ -50,7 +59,11 @@ export const LeftSide = (props) => {
               setEditorType("SingleLineText");
               setEditorStatus("Edit");
             } else {
-              alert("当前还有一个问题未编辑完哦!");
+              Modal.info({
+                title: "当前还有一个问题未编辑完哦",
+                content: "点击确定，继续编辑已有问题",
+                okText: "确定",
+              });
             }
           }}
         >
