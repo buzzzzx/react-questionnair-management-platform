@@ -26,10 +26,12 @@ import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   RiseOutlined,
+  CloudDownloadOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { download } from "../../utils/excel";
 
 /** @jsxImportSource @emotion/react */
 export const List = ({
@@ -66,16 +68,6 @@ export const List = ({
     setHoverQuestionnaire(null);
   };
 
-  // handle checkbox
-  // const checkBoxHandler = (e, id) => {
-  //   if (e.target.checked) {
-  //     setDeletes([...deletes, id]);
-  //   } else {
-  //     const filtered = deletes.filter((quesId) => quesId !== id);
-  //     setDeletes(filtered);
-  //   }
-  // };
-
   // handle switch
   const switchHandler = (checked, evt, id) => {
     if (checked) {
@@ -111,7 +103,7 @@ export const List = ({
   return (
     <ListContainer>
       {loading ? (
-        <PageHeaderSkeletons len={list.length || 2} />
+        <PageHeaderSkeletons />
       ) : list.length === 0 ? (
         <EmptyQuestionnaires />
       ) : (
@@ -148,6 +140,7 @@ export const List = ({
 
           return (
             <Container
+              key={index}
               onMouseEnter={() => mouseEnterHandler(id)}
               onMouseLeave={() => mouseLeaveHandler(id)}
             >
@@ -158,7 +151,6 @@ export const List = ({
                     backgroundColor: "#EEE9E9",
                   },
                 }}
-                key={index}
                 ghost={false}
                 title={title}
                 tags={<Tag color={tagColor}>{statusText}</Tag>}
@@ -191,6 +183,14 @@ export const List = ({
                       >
                         <span> </span>
                         <Link to={`${String(id)}/analysis`}>统计分析</Link>
+                      </ButtonNoPadding>,
+                      <ButtonNoPadding
+                        icon={<CloudDownloadOutlined />}
+                        type={"link"}
+                        onClick={() => download(id)}
+                      >
+                        <span> </span>
+                        导出 Excel
                       </ButtonNoPadding>,
                     ]}
                   />,
@@ -287,13 +287,6 @@ export const List = ({
                         width: "max-content",
                       }}
                     >
-                      {/*<Statistic*/}
-                      {/*  style={{*/}
-                      {/*    marginRight: 32,*/}
-                      {/*  }}*/}
-                      {/*  title="填写链接"*/}
-                      {/*  value={statusText}*/}
-                      {/*/>*/}
                       <Statistic
                         title="答卷数量"
                         value={answerCount}

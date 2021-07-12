@@ -2,15 +2,11 @@ import { Skeleton, Space } from "antd";
 import { Row } from "../../components/lib";
 import styled from "@emotion/styled";
 
-export const PageHeaderSkeletons = ({ len }) => {
-  const skeletons = [];
-  for (let i = 0; i < len; i += 1) {
-    skeletons.push(<SingleSkeleton key={i} />);
-  }
+export const PageHeaderSkeletons = () => {
   return (
     <div>
-      {/*<SingleSkeleton />*/}
-      {skeletons}
+      <SingleSkeleton />
+      <SingleSkeleton />
     </div>
   );
 };
