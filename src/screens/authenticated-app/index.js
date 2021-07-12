@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import { QuestionnairePreview } from "../questionnaire-preview";
 import { QuestionnaireAnalysis } from "../questionnaire-analysis";
 import { QuestionnaireFill } from "../questionnaire-fill";
+import React from "react";
 
 export const AuthenticatedApp = () => {
   // 路由：创建问卷，编辑问卷，预览，统计分析

@@ -26,10 +26,12 @@ import {
   PlayCircleOutlined,
   PauseCircleOutlined,
   RiseOutlined,
+  CloudDownloadOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
 import { useEffect } from "react";
+import { download } from "../../utils/excel";
 
 /** @jsxImportSource @emotion/react */
 export const List = ({
@@ -181,6 +183,14 @@ export const List = ({
                       >
                         <span> </span>
                         <Link to={`${String(id)}/analysis`}>统计分析</Link>
+                      </ButtonNoPadding>,
+                      <ButtonNoPadding
+                        icon={<CloudDownloadOutlined />}
+                        type={"link"}
+                        onClick={() => download(id)}
+                      >
+                        <span> </span>
+                        导出 Excel
                       </ButtonNoPadding>,
                     ]}
                   />,

@@ -120,10 +120,12 @@ export const useAnalysisQuestionnaire = (id) => {
  * @return {UseQueryResult<unknown, unknown>}
  */
 export const useFillQuestionnaire = (openId) => {
+  const client = http;
+
   return useQuery(
     ["questionnaire", { openId }],
     () =>
-      http(`questionnaires/${openId}/write`, {
+      client(`questionnaires/${openId}/write`, {
         method: "GET",
       }),
     {

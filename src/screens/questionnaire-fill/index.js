@@ -1,5 +1,8 @@
 import { useLocation } from "react-router-dom";
-import { useFillQuestionnaire } from "../../utils/questionnaire";
+import {
+  useFillQuestionnaire,
+  useQuestionnaire,
+} from "../../utils/questionnaire";
 import { Form, Spin } from "antd";
 
 export const QuestionnaireFill = () => {
@@ -14,16 +17,18 @@ export const QuestionnaireFill = () => {
     error,
   } = useFillQuestionnaire(openId);
 
-  console.log(questionnaire);
+  // console.log(questionnaire);
 
-  return isLoading ? (
-    <Spin size={"large"} />
-  ) : (
-    <Form>
-      <Form.Item>{questionnaire.title}</Form.Item>
-      {questionnaire.questions.map((question) => (
-        <Form.Item key={question.id}>{question.title}</Form.Item>
-      ))}
-    </Form>
-  );
+  return <div>问卷填写</div>;
+
+  // return isLoading ? (
+  //   <Spin size={"large"} />
+  // ) : (
+  //   <Form>
+  //     <Form.Item>{questionnaire.title}</Form.Item>
+  //     {questionnaire.questions.map((question) => (
+  //       <Form.Item key={question.id}>{question.title}</Form.Item>
+  //     ))}
+  //   </Form>
+  // );
 };
