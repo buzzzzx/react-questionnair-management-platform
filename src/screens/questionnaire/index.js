@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Layout, Input, Button, Alert, Space } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Layout, Input, Button, Modal } from "antd";
 import "antd/dist/antd.css";
 import styled from "@emotion/styled";
+
 import { Editor } from "./Editor";
 import { LeftSide } from "./LeftSide";
 import { SingleChoice } from "./SingleChoice/index";
@@ -15,7 +17,6 @@ import {
   useQuestionnaire,
 } from "../../utils/questionnaire";
 import { useQuestionnairesQueryKey } from "../questionnair-list/util";
-import { description } from "commander";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,8 +27,6 @@ export const Questionnaire = () => {
     arr[arr.length - 2] === "questionnaires"
       ? false
       : Number(arr[arr.length - 2]);
-
-  console.log("id", id);
 
   // useQuestionnaire
   const { data: editingQuestionnaire, isLoading } = useQuestionnaire(id);
@@ -43,8 +42,9 @@ export const Questionnaire = () => {
     isLoading: mutateLoading,
   } = useMutateQuestionnaire(useQuestionnairesQueryKey());
 
-  const title = editingQuestionnaire ? " 编辑问卷" : " 新建问卷";
-  console.log(title);
+  const navigate = useNavigate();
+
+  const title = editingQuestionnaire ? "编辑问卷" : "新建问卷";
 
   // return (
   //     isLoading ? <div>isloading...</div> :
@@ -80,18 +80,35 @@ export const Questionnaire = () => {
       questions: questionList,
       id: editingQuestionnaire ? id : null,
     };
-
-    console.log("最终提交的问卷", questionnaire);
-    const response = mutateAsync(questionnaire);
-    console.log("response", response);
-    var code = 1;
-    response.then((result) => {
-      code = result.code;
-    });
-    console.log("返回的code", code);
-    if (code === 0) {
-      console.log("编辑成功");
-      return Alert("编辑成功");
+    if (questionnaire.questions.length === 0 || questionnaire.title === "") {
+      const errorContent =
+        questionnaire.questions.length === 0
+          ? "问卷还没有问题哦"
+          : "问卷还没有标题哦";
+      Modal.error({
+        title: "当前问卷还未完成编辑哦",
+        content: errorContent,
+      });
+    } else {
+      console.log("最终提交的问卷", questionnaire);
+      const response = mutateAsync(questionnaire);
+      console.log("resoponse", response);
+      response.then((result) => {
+        const sucessContent = editingQuestionnaire
+          ? "编辑问卷成功，请点击确定返回首页"
+          : "新建问卷成功，请点击确定返回首页";
+        const msg = result.msg;
+        if (msg === "创建成功" || msg === "修改成功") {
+          Modal.success({
+            title: "编辑成功",
+            content: <Button>{sucessContent}</Button>,
+            okText: "确定",
+            onOk() {
+              navigate(`/`);
+            },
+          });
+        }
+      });
     }
   };
 
@@ -111,7 +128,7 @@ export const Questionnaire = () => {
     title: "",
     type: 0,
     remarks: null,
-    isnecessary: false,
+    isNecessary: false,
     option: [
       { no: 1, text: "" },
       { no: 2, text: "" },
@@ -123,7 +140,7 @@ export const Questionnaire = () => {
     title: "",
     type: 1,
     remarks: null,
-    isnecessary: false,
+    isNecessary: false,
     option: [
       { no: 1, text: "" },
       { no: 2, text: "" },
@@ -134,7 +151,7 @@ export const Questionnaire = () => {
     no: ques_no(),
     type: 2,
     title: null,
-    isnecessary: false,
+    isNecessary: false,
     remarks: null,
   };
 
@@ -175,7 +192,7 @@ export const Questionnaire = () => {
                 type="button"
                 value="完成编辑"
                 style={{
-                  marginRight: 40,
+                  marginRight: 64,
                   width: 100,
                   height: "100%",
                   background: "#0052cc",
@@ -218,12 +235,13 @@ export const Questionnaire = () => {
               </div>
             </Content>
             <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-              问卷管理平台
+              问卷喵 提供技术支持
             </Footer>
           </Layout>
         </Layout>
       );
     } else if (editorStatus === "NotEdit" && questionList.length > 0) {
+      console.log("上面展示问卷列表，下面展示问题创建");
       return (
         <Layout>
           <Sider
@@ -250,13 +268,14 @@ export const Questionnaire = () => {
                 type="button"
                 value="完成编辑"
                 style={{
-                  marginRight: 40,
+                  marginRight: 64,
                   width: 100,
                   height: "100%",
                   background: "#0052cc",
                   fontSize: 20,
                   color: "white",
                   textAlign: "center",
+                  cursor: "pointer",
                 }}
                 onClick={onFinish}
               ></Input>
@@ -300,7 +319,7 @@ export const Questionnaire = () => {
               </div>
             </Content>
             <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-              问卷管理平台
+              问卷喵 提供技术支持
             </Footer>
           </Layout>
         </Layout>
@@ -333,13 +352,14 @@ export const Questionnaire = () => {
                   type="button"
                   value="完成编辑"
                   style={{
-                    marginRight: 40,
+                    marginRight: 64,
                     width: 100,
                     height: "100%",
                     background: "#0052cc",
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -399,7 +419,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
@@ -431,13 +451,14 @@ export const Questionnaire = () => {
                   type="button"
                   value="完成编辑"
                   style={{
-                    marginRight: 40,
+                    marginRight: 64,
                     width: 100,
                     height: "100%",
                     background: "#0052cc",
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -496,7 +517,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
@@ -529,13 +550,14 @@ export const Questionnaire = () => {
                   type="button"
                   value="完成编辑"
                   style={{
-                    marginRight: 40,
+                    marginRight: 64,
                     width: 100,
                     height: "100%",
                     background: "#0052cc",
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -594,7 +616,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
@@ -629,5 +651,5 @@ const InputTitle = styled(Input)`
 
 const InputDescription = styled(Input)`
   font-size: 18px;
-  margin-bottom: 40px;
+  margin-bottom: 64px;
 `;

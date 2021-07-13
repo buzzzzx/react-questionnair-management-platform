@@ -18,7 +18,7 @@ export const SingleLineText = (props) => {
 
   const [form] = Form.useForm();
   const [title, setTitle] = useState(currQues.title);
-  const [isnecessary, setIsNecessary] = useState(currQues.isnecessary);
+  const [isNecessary, setIsNecessary] = useState(currQues.isNecessary);
   const [isNote, setIsNote] = useState(
     currQues.remarks === null ? false : true
   );
@@ -35,7 +35,7 @@ export const SingleLineText = (props) => {
       no: currQues.no,
       type: 2,
       title: title,
-      isnecessary: isnecessary,
+      isNecessary: isNecessary,
       remarks: remarks,
     };
 
@@ -45,7 +45,7 @@ export const SingleLineText = (props) => {
     } else if (isUpdate && questionItem !== currQues) {
       var editQues = questionList.find((ques) => ques.no === questionItem.no);
       editQues.title = questionItem.title;
-      editQues.isnecessary = questionItem.isnecessary;
+      editQues.isNecessary = questionItem.isNecessary;
       editQues.remarks = questionItem.remarks;
       setQuestionList(questionList);
       setEditorStatus("NotEdit");
@@ -107,7 +107,7 @@ export const SingleLineText = (props) => {
             <EditorRowContent>
               <EditorCheckbox>
                 <EditorCheckboxInner
-                  checked={isnecessary}
+                  checked={isNecessary}
                   onChange={(e) => {
                     setIsNecessary(e.target.checked);
                   }}

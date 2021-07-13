@@ -1,8 +1,9 @@
-import { Input } from "antd";
+import { Input, Divider, Modal } from "antd";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
 import { SingleLineText } from "../SingleLineText";
+import { Content } from "antd/lib/layout/layout";
 
 export const SingleLineQuesList = (props) => {
   const {
@@ -21,60 +22,71 @@ export const SingleLineQuesList = (props) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const deleteQues = () => {
-    const newQuestionList = questionList.filter(
-      (ques) => ques !== questionItem
-    );
-    setQuestionList(newQuestionList);
+    Modal.confirm({
+      title: "确定删除这个问题吗",
+      content: "点击确定删除",
+      okText: "确定",
+      cancelText: "取消",
+      onOk() {
+        const newQuestionList = questionList.filter(
+          (ques) => ques !== questionItem
+        );
+        setQuestionList(newQuestionList);
+      },
+    });
   };
 
   if (isEdit === false) {
     return (
-      <QuestionnaireSubject
-        onMouseEnter={() => {
-          setHovering(true);
-        }}
-        onMouseLeave={() => {
-          setHovering(false);
-        }}
-      >
-        <QuestionnaireSubjectInner>
-          <SubjectRow>
-            <span>{ques_id + "."}</span>
-            <span>{questionItem.title}</span>
-            {questionItem.isnecessary ? (
-              <SubjectRowRequire>*</SubjectRowRequire>
-            ) : (
-              <></>
-            )}
-            {questionItem.remarks !== null ? (
-              <SubjectRemarks>{questionItem.remarks}</SubjectRemarks>
-            ) : (
-              <></>
-            )}
-          </SubjectRow>
-          <SubjectRow>
-            <SubjectInput></SubjectInput>
-          </SubjectRow>
-          <SubjectMask>
-            {hovering ? (
-              <SubjectControlBar>
-                <SubjectBarButton>
-                  <FormOutlined
-                    onClick={() => {
-                      setIsEdit(true);
-                    }}
-                  />
-                </SubjectBarButton>
-                <SubjectBarButton>
-                  <DeleteOutlined onClick={deleteQues} />
-                </SubjectBarButton>
-              </SubjectControlBar>
-            ) : (
-              <></>
-            )}
-          </SubjectMask>
-        </QuestionnaireSubjectInner>
-      </QuestionnaireSubject>
+      <>
+        <QuestionnaireSubject
+          onMouseEnter={() => {
+            setHovering(true);
+          }}
+          onMouseLeave={() => {
+            setHovering(false);
+          }}
+        >
+          <QuestionnaireSubjectInner>
+            <SubjectRow>
+              <span>{ques_id + "."}</span>
+              <span>{questionItem.title}</span>
+              {questionItem.isNecessary ? (
+                <SubjectRowRequire>*</SubjectRowRequire>
+              ) : (
+                <></>
+              )}
+              {questionItem.remarks !== null ? (
+                <SubjectRemarks>{questionItem.remarks}</SubjectRemarks>
+              ) : (
+                <></>
+              )}
+            </SubjectRow>
+            <SubjectRow>
+              <SubjectInput></SubjectInput>
+            </SubjectRow>
+            <SubjectMask>
+              {hovering ? (
+                <SubjectControlBar>
+                  <SubjectBarButton>
+                    <FormOutlined
+                      onClick={() => {
+                        setIsEdit(true);
+                      }}
+                    />
+                  </SubjectBarButton>
+                  <SubjectBarButton>
+                    <DeleteOutlined onClick={deleteQues} />
+                  </SubjectBarButton>
+                </SubjectControlBar>
+              ) : (
+                <></>
+              )}
+            </SubjectMask>
+          </QuestionnaireSubjectInner>
+        </QuestionnaireSubject>
+        <Divider />
+      </>
     );
   } else {
     return (
@@ -133,7 +145,7 @@ const SubjectMask = styled.div`
 `;
 
 const SubjectControlBar = styled.div`
-  width: 48px;
+  width: 80px;
   background: #ededed;
   position: absolute;
   top: 0;
@@ -149,7 +161,10 @@ const SubjectBarButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+  font-size: x-large;
+  color: #0052cc;
 `;
 
 const SubjectRowRequire = styled.span`
