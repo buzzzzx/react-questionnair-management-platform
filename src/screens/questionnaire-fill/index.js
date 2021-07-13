@@ -1,10 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import {
-  useFillQuestionnaire,
-  useQuestionnaire,
-} from "../../utils/questionnaire";
+import { useFillQuestionnaire } from "../../utils/questionnaire";
 import {
   Spin,
   Radio,
@@ -16,8 +13,14 @@ import {
   Button,
   Modal,
   Anchor,
+  message,
 } from "antd";
 import "antd/dist/antd.css";
+import { useAsync } from "../../utils/use-async";
+import axios from "axios";
+
+// FIXME
+const apiUrl = "http://121.36.47.113:3000";
 
 export const QuestionnaireFill = () => {
   console.log("进入 QuestionnaireFill");
@@ -35,7 +38,17 @@ export const QuestionnaireFill = () => {
   const { Link } = Anchor;
 
   const [loading, setIsLoading] = useState(true);
-  const [answer, setAnswer] = useState(new Array());
+  const [answer, setAnswer] = useState([]);
+
+  // TODO 有些组件上有 id="question.no" 这是啥意思，我怀疑你这里写得有问题
+  // 2021-7-13 Anak7n
+  const {
+    run,
+    isLoading: submitLoading,
+    error: submitError,
+  } = useAsync(undefined, {
+    throwOnError: true,
+  });
 
   useEffect(() => {
     if (!isLoading && questionnaire !== undefined && answer.length === 0) {
@@ -61,7 +74,7 @@ export const QuestionnaireFill = () => {
     );
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log("点击提交问卷答案");
     const submitAnswer = {
       id: questionnaire.id,
@@ -69,6 +82,7 @@ export const QuestionnaireFill = () => {
     };
 
     //判断是否有必填问题未填
+    // FIXME 这里有几个 bug：1. 自动定位；2. 判断文本题未填，应该还要加一个判断是否为空字符
     for (const question of questionnaire.questions) {
       const question_id = 3;
       const return_location = "#" + String(question_id);
@@ -85,6 +99,17 @@ export const QuestionnaireFill = () => {
       }
     }
     console.log("最终提交的问卷答案", submitAnswer);
+
+    // 2021-7-13 Anak7n
+    try {
+      await run(
+        axios.post(`${apiUrl}/questionnaires/${openId}/submit`, submitAnswer)
+      );
+      message.success("提交问卷成功");
+    } catch (e) {
+      // onError(e);
+      message.success("提交问卷失败");
+    }
   };
 
   // 单选题显示
@@ -259,7 +284,12 @@ export const QuestionnaireFill = () => {
             }
           })}
           <div style={{ paddingBottom: "20px" }}>
-            <Button type="primary" size="large" onClick={onSubmit}>
+            <Button
+              loading={submitLoading}
+              type="primary"
+              size="large"
+              onClick={onSubmit}
+            >
               提交问卷
             </Button>
           </div>
