@@ -191,6 +191,8 @@ export const Questionnaire = () => {
               <Input
                 type="button"
                 value="完成编辑"
+                onMouseOver="this.style.borderColor='white'"
+                onMouseLeave="this.style."
                 style={{
                   marginRight: 64,
                   width: 100,
@@ -199,6 +201,8 @@ export const Questionnaire = () => {
                   fontSize: 20,
                   color: "white",
                   textAlign: "center",
+                  cursor: "pointer",
+                  borderColor: "none",
                 }}
                 onClick={onFinish}
               ></Input>
@@ -211,7 +215,7 @@ export const Questionnaire = () => {
                 style={{
                   padding: 24,
                   textAlign: "center",
-                  overflow: "scroll",
+                  overflow: "auto",
                   height: "98%",
                 }}
               >
@@ -286,7 +290,7 @@ export const Questionnaire = () => {
                 style={{
                   padding: 24,
                   textAlign: "center",
-                  overflow: "scroll",
+                  overflow: "auto",
                   height: "98%",
                 }}
               >
@@ -365,13 +369,13 @@ export const Questionnaire = () => {
                 ></Input>
               </Header>
 
-              <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+              <Content style={{ margin: "24px 16px 0", overflow: "auto" }}>
                 <div
                   className="site-layout-background"
                   style={{
                     padding: 24,
                     textAlign: "center",
-                    overflow: "scroll",
+                    overflow: "auto",
                     height: "98%",
                   }}
                 >
@@ -469,7 +473,7 @@ export const Questionnaire = () => {
                   style={{
                     padding: 24,
                     textAlign: "center",
-                    overflow: "scroll",
+                    overflow: "auto",
                     height: "98%",
                   }}
                 >
@@ -568,7 +572,7 @@ export const Questionnaire = () => {
                   style={{
                     padding: 24,
                     textAlign: "center",
-                    overflow: "scroll",
+                    overflow: "auto",
                     height: "98%",
                   }}
                 >

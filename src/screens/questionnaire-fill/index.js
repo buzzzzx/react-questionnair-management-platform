@@ -87,13 +87,16 @@ export const QuestionnaireFill = () => {
       const question_id = 3;
       const return_location = "#" + String(question_id);
       const ques_index = questionnaire.questions.indexOf(question);
-      if (question.isNecessary === true && answer[ques_index].answer === null) {
+      if (
+        question.isNecessary === true &&
+        (answer[ques_index].answer === null || answer[ques_index].answer === "")
+      ) {
         console.log("进入这个页面");
         Modal.error({
           title: "当前问卷还有未填写正确的地方哦",
           content:
             "请确保所有问题都已按照要求填写，点击确定页面将自动定位到第一个未按照规范填写的问题",
-          okText: <a href={return_location}>确定</a>,
+          okText: "确定",
         });
         break;
       }
@@ -119,7 +122,7 @@ export const QuestionnaireFill = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -157,7 +160,7 @@ export const QuestionnaireFill = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -196,7 +199,7 @@ export const QuestionnaireFill = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -222,21 +225,19 @@ export const QuestionnaireFill = () => {
     <Layout
       className="layout"
       style={{
+        display: "flex",
         textAlign: "center",
         alignItems: "center",
-        justifyContent: "center",
         backgroundImage: "none",
       }}
     >
       <Content
         style={{
-          padding: "0 50px",
-          textAlign: "center",
-          alignItems: "center",
-          justifyContent: "center",
+          padding: "10 50px",
           background: "white",
           height: "98%",
           overflow: "auto",
+          width: "60%",
         }}
       >
         <Title>{questionnaire.title}</Title>
@@ -248,9 +249,8 @@ export const QuestionnaireFill = () => {
         <Divider />
         <div
           style={{
-            textAlign: "center",
-            alignItems: "center",
-            justifyContent: "center",
+            height: "95%",
+            marginBottom: "20",
           }}
         >
           {questionnaire.questions.map((question, index) => {
@@ -309,16 +309,15 @@ export const QuestionnaireFill = () => {
 // `;
 
 const Title = styled.div`
-  line-height: 20px;
-  text-align: center;
-  width: 800px;
-  padding: 40px 2% 20px;
   font-size: 35px;
-  color: #0095ff;
+  margin-bottom: 20px;
+  margin-top: 18px;
 `;
 
 const Question = styled.div`
+  position: relative;
   padding: 5px;
+  padding-left: 80px;
   width: 800px;
   height: auto;
   text-align: left;

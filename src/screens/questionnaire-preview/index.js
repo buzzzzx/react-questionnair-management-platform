@@ -47,7 +47,7 @@ export const QuestionnairePreview = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -79,7 +79,7 @@ export const QuestionnairePreview = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -109,7 +109,7 @@ export const QuestionnairePreview = () => {
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
-          <span>{quest_display_id + "."}</span>
+          <span>{quest_display_id + ". "}</span>
           <span>{question.title}</span>
           {question.isNecessary ? <QuestionRequire>*</QuestionRequire> : <></>}
         </QuestionTitle>
@@ -129,24 +129,19 @@ export const QuestionnairePreview = () => {
     <Layout
       className="layout"
       style={{
+        display: "flex",
         textAlign: "center",
         alignItems: "center",
-        justifyContent: "center",
-        overflow: "auto",
-        height: "95%",
         backgroundImage: "none",
       }}
     >
       <Content
         style={{
           padding: "10 50px",
-          textAlign: "center",
-          alignItems: "center",
-          justifyContent: "center",
           background: "white",
-          position: "relative",
           height: "98%",
           overflow: "auto",
+          width: "60%",
         }}
       >
         <Title>{questionnaire.title}</Title>
@@ -158,9 +153,6 @@ export const QuestionnairePreview = () => {
         <Divider />
         <div
           style={{
-            textAlign: "center",
-            alignItems: "center",
-            justifyContent: "center",
             height: "95%",
             marginBottom: "20",
           }}
@@ -226,17 +218,15 @@ export const QuestionnairePreview = () => {
 // `;
 
 const Title = styled.div`
-  line-height: 20px;
-  text-align: center;
-  width: 800px;
-  padding: 40px 2% 20px;
   font-size: 35px;
-  color: #0095ff;
+  margin-bottom: 20px;
+  margin-top: 18px;
 `;
 
 const Question = styled.div`
   position: relative;
   padding: 5px;
+  padding-left: 80px;
   width: 800px;
   height: auto;
   text-align: left;
