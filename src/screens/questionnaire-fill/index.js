@@ -31,7 +31,7 @@ export const QuestionnaireFill = () => {
     error,
   } = useFillQuestionnaire(openId);
 
-  const { Content } = Layout;
+  const { Content, Footer } = Layout;
   const { Link } = Anchor;
 
   const [loading, setIsLoading] = useState(true);
@@ -200,77 +200,83 @@ export const QuestionnaireFill = () => {
         textAlign: "center",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "scroll",
-        height: "95%",
         backgroundImage: "none",
       }}
     >
       <Content
-        style={{ padding: "0 50px", textAlign: "center", background: "white" }}
+        style={{
+          padding: "0 50px",
+          textAlign: "center",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "white",
+          height: "98%",
+          overflow: "auto",
+        }}
       >
-        <Questions>
-          <Title>{questionnaire.title}</Title>
-          {questionnaire.description === null ? (
-            <InputDescription>{questionnaire.description}</InputDescription>
-          ) : (
-            <></>
-          )}
-          <Divider />
-          <div
-            style={{
-              textAlign: "center",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {questionnaire.questions.map((question, index) => {
-              if (question.type === 0) {
-                return (
-                  <SingleChoiceDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></SingleChoiceDisplay>
-                );
-              } else if (question.type === 1) {
-                return (
-                  <MultipleChoiceDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></MultipleChoiceDisplay>
-                );
-              } else {
-                return (
-                  <SingleLineTextDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></SingleLineTextDisplay>
-                );
-              }
-            })}
+        <Title>{questionnaire.title}</Title>
+        {questionnaire.description === null ? (
+          <InputDescription>{questionnaire.description}</InputDescription>
+        ) : (
+          <></>
+        )}
+        <Divider />
+        <div
+          style={{
+            textAlign: "center",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {questionnaire.questions.map((question, index) => {
+            if (question.type === 0) {
+              return (
+                <SingleChoiceDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></SingleChoiceDisplay>
+              );
+            } else if (question.type === 1) {
+              return (
+                <MultipleChoiceDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></MultipleChoiceDisplay>
+              );
+            } else {
+              return (
+                <SingleLineTextDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></SingleLineTextDisplay>
+              );
+            }
+          })}
+          <div style={{ paddingBottom: "20px" }}>
             <Button type="primary" size="large" onClick={onSubmit}>
               提交问卷
             </Button>
-            <Space />
           </div>
-        </Questions>
+        </div>
       </Content>
+      <Footer>问卷喵 提供技术支持</Footer>
     </Layout>
   );
 };
 
-const Questions = styled.div`
-  width: 100%;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`;
+// const Questions = styled.div`
+//   width:100%;
+//   text-align: center;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100%;
+// `;
 
 const Title = styled.div`
   line-height: 20px;
