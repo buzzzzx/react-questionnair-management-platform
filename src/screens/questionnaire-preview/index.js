@@ -16,7 +16,7 @@ import { useQuestionnaire } from "../../utils/questionnaire";
 
 export const QuestionnairePreview = () => {
   const location = useLocation();
-  const { Content } = Layout;
+  const { Content, Footer } = Layout;
   const navigate = useNavigate();
 
   const arr = location.pathname.split("/");
@@ -132,86 +132,98 @@ export const QuestionnairePreview = () => {
         textAlign: "center",
         alignItems: "center",
         justifyContent: "center",
-        overflow: "scroll",
+        overflow: "auto",
         height: "95%",
         backgroundImage: "none",
       }}
     >
       <Content
-        style={{ padding: "0 50px", textAlign: "center", background: "white" }}
+        style={{
+          padding: "10 50px",
+          textAlign: "center",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "white",
+          position: "relative",
+          height: "98%",
+          overflow: "auto",
+        }}
       >
-        <Questions>
-          <Title>{questionnaire.title}</Title>
-          {questionnaire.description === null ? (
-            <InputDescription>{questionnaire.description}</InputDescription>
-          ) : (
-            <></>
-          )}
-          <Divider />
-          <div
-            style={{
-              textAlign: "center",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {questionnaire.questions.map((question, index) => {
-              if (question.type === 0) {
-                return (
-                  <SingleChoiceDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></SingleChoiceDisplay>
-                );
-              } else if (question.type === 1) {
-                return (
-                  <MultipleChoiceDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></MultipleChoiceDisplay>
-                );
-              } else {
-                return (
-                  <SingleLineTextDisplay
-                    id="question.no"
-                    key={generateKey()}
-                    question={question}
-                    index={index}
-                  ></SingleLineTextDisplay>
-                );
-              }
-            })}
-            <div>
-              <ButtonInner type="primary" size="large" onClick={onSubmit}>
-                提交问卷
-              </ButtonInner>
-              <ButtonInner
-                size="large"
-                onClick={() => {
-                  navigate("/");
-                }}
-              >
-                返回首页
-              </ButtonInner>
-            </div>
+        <Title>{questionnaire.title}</Title>
+        {questionnaire.description === null ? (
+          <></>
+        ) : (
+          <InputDescription>{questionnaire.description}</InputDescription>
+        )}
+        <Divider />
+        <div
+          style={{
+            textAlign: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "95%",
+            marginBottom: "20",
+          }}
+        >
+          {questionnaire.questions.map((question, index) => {
+            if (question.type === 0) {
+              return (
+                <SingleChoiceDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></SingleChoiceDisplay>
+              );
+            } else if (question.type === 1) {
+              return (
+                <MultipleChoiceDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></MultipleChoiceDisplay>
+              );
+            } else {
+              return (
+                <SingleLineTextDisplay
+                  id="question.no"
+                  key={generateKey()}
+                  question={question}
+                  index={index}
+                ></SingleLineTextDisplay>
+              );
+            }
+          })}
+          <div style={{ paddingBottom: "20px" }}>
+            <ButtonInner type="primary" size="large" onClick={onSubmit}>
+              提交问卷
+            </ButtonInner>
+            <ButtonInner
+              size="large"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              返回首页
+            </ButtonInner>
           </div>
-        </Questions>
+        </div>
       </Content>
+
+      <Footer>问卷喵 提供技术支持</Footer>
     </Layout>
   );
 };
 
-const Questions = styled.div`
-  width: 100%;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`;
+// const Questions = styled.div`
+//   width: 100%;
+//   text-align: center;
+//   align-items: center;
+//   justify-content: center;
+//   height: 95%;
+//   overflow: visible;
+// `;
 
 const Title = styled.div`
   line-height: 20px;
@@ -223,6 +235,7 @@ const Title = styled.div`
 `;
 
 const Question = styled.div`
+  position: relative;
   padding: 5px;
   width: 800px;
   height: auto;
@@ -233,7 +246,7 @@ const QuestionTitle = styled.div`
   font-size: 20px;
   color: #444444;
   font-weight: bold;
-  height: auto;
+  height: 99%;
   line-height: 20px;
   position: relative;
   margin-bottom: 15px;
@@ -252,9 +265,10 @@ const QuestionRequire = styled.span`
   margin-left: 5px;
 `;
 
-const InputDescription = styled(Input)`
+const InputDescription = styled.div`
   font-size: 18px;
-  margin-bottom: 64px;
+  margin-bottom: 40px;
+  margin-top: 18px;
 `;
 
 const ButtonInner = styled(Button)`
