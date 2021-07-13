@@ -27,11 +27,13 @@ import {
   PauseCircleOutlined,
   RiseOutlined,
   CloudDownloadOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { download } from "../../utils/excel";
+import { EndTimePicker } from "./end-time-picker";
 
 /** @jsxImportSource @emotion/react */
 export const List = ({
@@ -51,6 +53,10 @@ export const List = ({
   // 填写链接：点击 copy
 
   // TODO 已结束状态
+  // 已结束状态不能够再发布，修改截止时间，编辑操作，disable
+  // 状态为已结束时发布图标为 <ClockCircleOutlined />
+  // 截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
+  // 点击 ok 弹出 Modal 询问是否
 
   useEffect(() => {
     if (deletes.length !== 0) {
@@ -116,26 +122,32 @@ export const List = ({
             answerCount,
             lastEditedTime,
             releaseTime,
+            endTime,
             openCode,
           } = questionnaire;
 
           let tagColor, statusText, buttonText, releaseIcon, releaseColor;
           if (status === 1) {
+            // 未发布状态
             tagColor = "blue";
             statusText = "未发布";
             buttonText = "发布";
             releaseIcon = <PlayCircleOutlined />;
             releaseColor = "#1E90FF";
           } else if (status === 2) {
+            // 已发布状态
             tagColor = "green";
             statusText = "发布中";
             buttonText = "停止";
             releaseIcon = <PauseCircleOutlined />;
             releaseColor = "#2E8B57";
           } else {
+            // 已结束状态
             tagColor = "yellow";
             statusText = "已结束";
-            buttonText = "发布"; // 还需要设置截止时间
+            buttonText = "已结束";
+            releaseIcon = <ClockCircleOutlined />;
+            releaseColor = "#FFFACD";
           }
 
           return (
@@ -208,6 +220,13 @@ export const List = ({
                                 okText: "确定",
                                 cancelText: "取消",
                               })
+                            : status === 3
+                            ? Modal.confirm({
+                                title: `「${questionnaire.title}」已结束`,
+                                content: "不能再进行编辑，请考虑新建问卷！",
+                                okText: "确定",
+                                cancelText: "取消",
+                              })
                             : navigate(`${String(id)}/editing`);
                         },
                       },
@@ -244,6 +263,7 @@ export const List = ({
                     key="1"
                     type="primary"
                     shape={"round"}
+                    disabled={status === 3}
                     icon={releaseIcon}
                     loading={releaseLoading}
                     style={{
@@ -311,6 +331,14 @@ export const List = ({
                         {releaseTime
                           ? dayjs(releaseTime).format("YYYY-MM-DD hh:mm:ss")
                           : "还没发布"}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="截止时间">
+                        {/*TODO id 字段*/}
+                        <EndTimePicker
+                          questionnaireStatus={status}
+                          endTime={endTime}
+                          questionnaireId={id}
+                        />
                       </Descriptions.Item>
                       <Descriptions.Item label="填写链接">
                         {openCode ? (
