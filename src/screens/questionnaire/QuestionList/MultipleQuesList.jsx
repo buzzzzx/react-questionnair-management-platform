@@ -58,7 +58,7 @@ export const MultipleQuesList = (props) => {
             <SubjectRow>
               <span>{ques_id + "."}</span>
               <span>{questionItem.title}</span>
-              {questionItem.isnecessary ? (
+              {questionItem.isNecessary ? (
                 <SubjectRowRequire>*</SubjectRowRequire>
               ) : (
                 <></>

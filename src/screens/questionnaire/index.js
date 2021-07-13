@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Link, Router, useNavigate } from "react-router-dom";
-import { Layout, Input, Button, Alert, Space, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Layout, Input, Button, Modal } from "antd";
 import "antd/dist/antd.css";
 import styled from "@emotion/styled";
 
@@ -128,7 +128,7 @@ export const Questionnaire = () => {
     title: "",
     type: 0,
     remarks: null,
-    isnecessary: false,
+    isNecessary: false,
     option: [
       { no: 1, text: "" },
       { no: 2, text: "" },
@@ -140,7 +140,7 @@ export const Questionnaire = () => {
     title: "",
     type: 1,
     remarks: null,
-    isnecessary: false,
+    isNecessary: false,
     option: [
       { no: 1, text: "" },
       { no: 2, text: "" },
@@ -151,7 +151,7 @@ export const Questionnaire = () => {
     no: ques_no(),
     type: 2,
     title: null,
-    isnecessary: false,
+    isNecessary: false,
     remarks: null,
   };
 
@@ -235,7 +235,7 @@ export const Questionnaire = () => {
               </div>
             </Content>
             <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-              问卷管理平台
+              问卷喵 提供技术支持
             </Footer>
           </Layout>
         </Layout>
@@ -275,6 +275,7 @@ export const Questionnaire = () => {
                   fontSize: 20,
                   color: "white",
                   textAlign: "center",
+                  cursor: "pointer",
                 }}
                 onClick={onFinish}
               ></Input>
@@ -318,7 +319,7 @@ export const Questionnaire = () => {
               </div>
             </Content>
             <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-              问卷管理平台
+              问卷喵 提供技术支持
             </Footer>
           </Layout>
         </Layout>
@@ -358,6 +359,7 @@ export const Questionnaire = () => {
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -417,7 +419,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
@@ -456,6 +458,7 @@ export const Questionnaire = () => {
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -514,7 +517,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
@@ -554,6 +557,7 @@ export const Questionnaire = () => {
                     fontSize: 20,
                     color: "white",
                     textAlign: "center",
+                    cursor: "pointer",
                   }}
                   onClick={onFinish}
                 ></Input>
@@ -612,7 +616,7 @@ export const Questionnaire = () => {
                 </div>
               </Content>
               <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
-                问卷管理平台
+                问卷喵 提供技术支持
               </Footer>
             </Layout>
           </Layout>
