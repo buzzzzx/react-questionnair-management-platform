@@ -60,7 +60,7 @@ export const SingleQuesList = (props) => {
         >
           <QuestionnaireSubjectInner>
             <SubjectRow>
-              <span>{ques_id + "."}</span>
+              <span>{ques_id + ". "}</span>
               <span>{questionItem.title}</span>
               {questionItem.isNecessary ? (
                 <SubjectRowRequire>*</SubjectRowRequire>
