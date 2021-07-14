@@ -8,12 +8,20 @@ import {
 } from "./use-optimistic-udpate";
 
 export const useQuestionnaires = (params = {}) => {
+  const intervalMs = 1000;
   const client = useHttp();
 
-  return useQuery(["questionnaires", params], () =>
-    client("questionnaires", {
-      data: cleanObject(params),
-    })
+  return useQuery(
+    ["questionnaires", params],
+    () =>
+      client("questionnaires", {
+        data: cleanObject(params),
+      }),
+    {
+      // Refetch the data every intervalMs
+      // https://react-query.tanstack.com/examples/auto-refetching
+      refetchInterval: intervalMs,
+    }
   );
 };
 

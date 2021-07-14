@@ -53,7 +53,7 @@ export const List = ({
   // 提示 message：删除，发布/停止发布，复制链接
   // 填写链接：点击 copy
   // 已结束状态
-  //    已结束状态不能够再发布，修改截止时间，编辑操作，disable
+  //    已结束状态不能够再发布，修改截止时间，编辑操作，disable，在修改截止时间，编辑操作，修改发布时 refetch 更新数据
   //    状态为已结束时发布图标为 <ClockCircleOutlined />
   //    截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
 
@@ -232,7 +232,6 @@ export const List = ({
                       {
                         name: "删除",
                         handler: () => {
-                          // setDeletes([]);
                           Modal.confirm({
                             title: `确定删除「${title}」吗？`,
                             content: "点击确定删除",
@@ -270,6 +269,10 @@ export const List = ({
                       borderColor: releaseColor,
                     }}
                     onClick={() => {
+                      if (status === 3) {
+                        message.error("该问卷已结束");
+                        return;
+                      }
                       editRelease({
                         id: questionnaire.id,
                         status: status === 1 ? 2 : 1,
