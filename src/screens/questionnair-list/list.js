@@ -144,7 +144,7 @@ export const List = ({
             // 已结束状态
             tagColor = "yellow";
             statusText = "已结束";
-            buttonText = "已结束";
+            buttonText = "结束";
             releaseIcon = <ClockCircleOutlined />;
             releaseColor = "#FFFACD";
           }
