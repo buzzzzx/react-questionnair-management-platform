@@ -20,21 +20,13 @@ export const EndTimePicker = ({
 
   function onChange(value) {
     if (value == null) {
-      Modal.confirm({
-        title: "确认清除截止日期吗？",
-        content: "点击确定清除",
-        okText: "确定",
-        cancelText: "取消",
-        onOk() {
-          editEndTime({ id: questionnaireId, endTime: null })
-            .then(() => {
-              message.success("截止时间清除成功");
-            })
-            .catch((e) => {
-              message.error("截止时间清除失败");
-            });
-        },
-      });
+      editEndTime({ id: questionnaireId, endTime: null })
+        .then(() => {
+          message.success("截止时间清除成功");
+        })
+        .catch((e) => {
+          message.error("截止时间清除失败");
+        });
     }
   }
 
@@ -55,19 +47,17 @@ export const EndTimePicker = ({
   }
 
   return (
-    <div>
-      <DatePicker
-        showNow={false}
-        disabled={questionnaireStatus === 3}
-        size={"small"}
-        placeholder={"请选择截止日期"}
-        showTime
-        disabledDate={disabledDate}
-        defaultValue={endTime ? moment(endTime, dataFormat) : null}
-        value={endTime ? moment(endTime) : null}
-        onOk={onOk}
-        onChange={onChange}
-      />
-    </div>
+    <DatePicker
+      showNow={false}
+      disabled={questionnaireStatus === 3}
+      size={"small"}
+      placeholder={"请选择截止日期"}
+      showTime
+      disabledDate={disabledDate}
+      defaultValue={endTime ? moment(endTime) : null}
+      // value={dateTime ? moment(dateTime) : null}
+      onOk={onOk}
+      onChange={onChange}
+    />
   );
 };
