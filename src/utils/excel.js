@@ -27,7 +27,8 @@ export const download = (id) => {
         // const fileName = `${name}.xlsx`;
         // a.download = decodeURIComponent(fileName);
         // a.click();
-        window.open("http://121.36.47.113:3000/download/68.xlsx");
+        // window.open("http://121.36.47.113:3000/download/68.xlsx");
+        window.open("http://121.36.47.113:3000/questionnaires/68/download");
         message.success("下载成功");
       })
       .catch((e) => {

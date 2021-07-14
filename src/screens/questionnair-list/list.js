@@ -8,12 +8,13 @@ import {
   Tooltip,
   message,
   Switch,
+  Space,
 } from "antd";
 import { More } from "./more";
 import dayjs from "dayjs";
 import {
   useDeleteQuestionnaire,
-  useEditReleaseQuestionnaire,
+  useEditQuestionnaire,
 } from "../../utils/questionnaire";
 import { useQuestionnairesQueryKey } from "./util";
 import { Link, useNavigate } from "react-router-dom";
@@ -51,12 +52,10 @@ export const List = ({
   // 批量删除
   // 提示 message：删除，发布/停止发布，复制链接
   // 填写链接：点击 copy
-
-  // TODO 已结束状态
-  // 已结束状态不能够再发布，修改截止时间，编辑操作，disable
-  // 状态为已结束时发布图标为 <ClockCircleOutlined />
-  // 截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
-  // 点击 ok 弹出 Modal 询问是否
+  // 已结束状态
+  //    已结束状态不能够再发布，修改截止时间，编辑操作，disable
+  //    状态为已结束时发布图标为 <ClockCircleOutlined />
+  //    截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
 
   useEffect(() => {
     if (deletes.length !== 0) {
@@ -102,7 +101,7 @@ export const List = ({
 
   // 发布（停止发布）
   const { mutateAsync: editRelease, isLoading: releaseLoading } =
-    useEditReleaseQuestionnaire(useQuestionnairesQueryKey());
+    useEditQuestionnaire(useQuestionnairesQueryKey());
 
   const navigate = useNavigate();
 
@@ -330,10 +329,9 @@ export const List = ({
                       <Descriptions.Item label="发布时间">
                         {releaseTime
                           ? dayjs(releaseTime).format("YYYY-MM-DD hh:mm:ss")
-                          : "还没发布"}
+                          : "无"}
                       </Descriptions.Item>
                       <Descriptions.Item label="截止时间">
-                        {/*TODO id 字段*/}
                         <EndTimePicker
                           questionnaireStatus={status}
                           endTime={endTime}
@@ -342,16 +340,26 @@ export const List = ({
                       </Descriptions.Item>
                       <Descriptions.Item label="填写链接">
                         {openCode ? (
-                          <Tooltip placement="topLeft" title={"点击复制"}>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                          <Space>
+                            <Tooltip placement="topLeft" title={"点击复制"}>
+                              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                              <a
+                                onClick={(event) =>
+                                  copyHandler(event, openCode)
+                                }
+                              >
+                                复制
+                              </a>
+                            </Tooltip>
                             <a
-                              onClick={(event) => copyHandler(event, openCode)}
+                              href={`http://localhost:3000/fill/${openCode}`}
+                              target={"_blank"}
                             >
-                              Click
+                              打开
                             </a>
-                          </Tooltip>
+                          </Space>
                         ) : (
-                          "还没发布"
+                          "无"
                         )}
                       </Descriptions.Item>
                     </Descriptions>

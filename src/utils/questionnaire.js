@@ -17,19 +17,6 @@ export const useQuestionnaires = (params = {}) => {
   );
 };
 
-export const useEditReleaseQuestionnaire = (queryKey) => {
-  const client = useHttp();
-
-  return useMutation(
-    (param) =>
-      client(`questionnaires/${param.id}`, {
-        data: param,
-        method: "PATCH",
-      }),
-    useEditConfig(queryKey)
-  );
-};
-
 export const useEditQuestionnaire = (queryKey) => {
   const client = useHttp();
 
