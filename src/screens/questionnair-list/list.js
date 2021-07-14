@@ -57,6 +57,13 @@ export const List = ({
   //    状态为已结束时发布图标为 <ClockCircleOutlined />
   //    截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
 
+  // TODO 复制问卷
+  // <CopyOutlined />
+  // 复制时可填写标题，说明，也可以不填，不填则使用原问卷的该数据，使用一个 modal
+  // 问卷的内容，除了 id（后端创建），发布时间（null），创建时间（后端创建），上次编辑时间（后端创建），截止时间（null），状态（1：未发布），答卷数量（0）
+  //    其余保持一致
+  // 使用创建问卷接口
+
   useEffect(() => {
     if (deletes.length !== 0) {
       setShowAll(true);
