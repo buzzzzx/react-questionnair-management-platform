@@ -13,6 +13,7 @@ import {
 import { More } from "./more";
 import dayjs from "dayjs";
 import {
+  useAddQuestionnaire,
   useDeleteQuestionnaire,
   useEditQuestionnaire,
 } from "../../utils/questionnaire";
@@ -29,12 +30,14 @@ import {
   RiseOutlined,
   CloudDownloadOutlined,
   ClockCircleOutlined,
+  CopyOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
 import { useEffect, useState } from "react";
 import { download } from "../../utils/excel";
 import { EndTimePicker } from "./end-time-picker";
+import { CopyQuestionnaire } from "./copy-questionnaire";
 
 /** @jsxImportSource @emotion/react */
 export const List = ({
@@ -56,13 +59,29 @@ export const List = ({
   //    已结束状态不能够再发布，修改截止时间，编辑操作，disable，在修改截止时间，编辑操作，修改发布时 refetch 更新数据
   //    状态为已结束时发布图标为 <ClockCircleOutlined />
   //    截止时间不能选择小于今天的天数，不能选择小于当前时间的时间
+  // 复制问卷
+  const { mutateAsync: copyQuestionnaire, isLoading: copyLoading } =
+    useAddQuestionnaire(useQuestionnairesQueryKey());
 
-  // TODO 复制问卷
-  // <CopyOutlined />
-  // 复制时可填写标题，说明，也可以不填，不填则使用原问卷的该数据，使用一个 modal
-  // 问卷的内容，除了 id（后端创建），发布时间（null），创建时间（后端创建），上次编辑时间（后端创建），截止时间（null），状态（1：未发布），答卷数量（0）
-  //    其余保持一致
-  // 使用创建问卷接口
+  const copyQuestionnaireHandler = (questionnaire) => {
+    Modal.confirm({
+      icon: null,
+      title: `复制「${questionnaire.title}」`,
+      okText: "复制",
+      cancelText: "取消复制",
+      content: (
+        <CopyQuestionnaire
+          questionnaire={questionnaire}
+          copyQuestionnaire={copyQuestionnaire}
+        />
+      ),
+      okButtonProps: {
+        htmlType: "submit",
+        form: "copyForm",
+        loading: copyLoading,
+      },
+    });
+  };
 
   useEffect(() => {
     if (deletes.length !== 0) {
@@ -236,6 +255,14 @@ export const List = ({
                             : navigate(`${String(id)}/editing`);
                         },
                       },
+                      <ButtonNoPadding
+                        icon={<CopyOutlined />}
+                        type={"link"}
+                        onClick={() => copyQuestionnaireHandler(questionnaire)}
+                      >
+                        <span> </span>
+                        复制
+                      </ButtonNoPadding>,
                       {
                         name: "删除",
                         handler: () => {
