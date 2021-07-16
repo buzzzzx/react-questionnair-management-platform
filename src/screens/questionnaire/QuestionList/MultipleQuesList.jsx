@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Modal } from "antd";
+import { Checkbox, Divider, Modal, Tooltip } from "antd";
 import styled from "@emotion/styled";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
@@ -118,7 +118,7 @@ export const MultipleQuesList = (props) => {
   }
 };
 
-const QuestionnaireSubject = styled.div`
+const QuestionnaireSubject = styled(Tooltip)`
   position: relative;
   width: 100%;
   padding: 0;

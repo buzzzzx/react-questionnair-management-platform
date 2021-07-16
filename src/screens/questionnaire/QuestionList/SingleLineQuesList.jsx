@@ -1,4 +1,4 @@
-import { Input, Divider, Modal } from "antd";
+import { Input, Divider, Modal, Tooltip } from "antd";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -105,7 +105,7 @@ export const SingleLineQuesList = (props) => {
   }
 };
 
-const QuestionnaireSubject = styled.div`
+const QuestionnaireSubject = styled(Tooltip)`
   position: relative;
   width: 100%;
   padding: 20px 0;

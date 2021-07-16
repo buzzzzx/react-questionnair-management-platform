@@ -101,7 +101,7 @@ export const Questionnaire = () => {
         if (msg === "创建成功" || msg === "修改成功") {
           Modal.success({
             title: "编辑成功",
-            content: <Button>{sucessContent}</Button>,
+            content: <>{sucessContent}</>,
             okText: "确定",
             onOk() {
               navigate(`/`);
@@ -157,8 +157,6 @@ export const Questionnaire = () => {
 
   // 当问卷中还没有创建问卷时，且编辑状态为false时，显示初始界面
   if (isLoading) {
-    console.log("Loading状态前的editorQuestionnaire", editingQuestionnaire);
-    console.log("Loading状态");
     return <span>...isLoading</span>;
   } else {
     if (
@@ -191,8 +189,14 @@ export const Questionnaire = () => {
               <Input
                 type="button"
                 value="完成编辑"
-                onMouseOver="this.style.borderColor='white'"
-                onMouseLeave="this.style."
+                placeholder="Borderless"
+                bordered={false}
+                onMouseOver={(e) => {
+                  e.target.bordered = true;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.bordered = false;
+                }}
                 style={{
                   marginRight: 64,
                   width: 100,
@@ -202,7 +206,6 @@ export const Questionnaire = () => {
                   color: "white",
                   textAlign: "center",
                   cursor: "pointer",
-                  borderColor: "none",
                 }}
                 onClick={onFinish}
               ></Input>
@@ -269,6 +272,16 @@ export const Questionnaire = () => {
               style={{ padding: 0, textAlign: "right" }}
             >
               <Input
+                placeholder="Borderless"
+                bordered={false}
+                autoFocus={true}
+                onMouseOver={(e) => {
+                  e.target.bordered = true;
+                  console.log(e.target.bordered);
+                }}
+                onMouseLeave={(e) => {
+                  e.target.bordered = false;
+                }}
                 type="button"
                 value="完成编辑"
                 style={{
@@ -280,6 +293,7 @@ export const Questionnaire = () => {
                   color: "white",
                   textAlign: "center",
                   cursor: "pointer",
+                  border: "1px, solid, white",
                 }}
                 onClick={onFinish}
               ></Input>
@@ -353,6 +367,8 @@ export const Questionnaire = () => {
                 style={{ padding: 0, textAlign: "right" }}
               >
                 <Input
+                  placeholder="Borderless"
+                  bordered={false}
                   type="button"
                   value="完成编辑"
                   style={{
@@ -454,6 +470,8 @@ export const Questionnaire = () => {
                 <Input
                   type="button"
                   value="完成编辑"
+                  placeholder="Borderless"
+                  bordered={false}
                   style={{
                     marginRight: 64,
                     width: 100,
@@ -553,6 +571,8 @@ export const Questionnaire = () => {
                 <Input
                   type="button"
                   value="完成编辑"
+                  placeholder="Borderless"
+                  bordered={false}
                   style={{
                     marginRight: 64,
                     width: 100,

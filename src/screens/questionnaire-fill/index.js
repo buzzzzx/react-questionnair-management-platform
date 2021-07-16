@@ -19,6 +19,8 @@ import "antd/dist/antd.css";
 import { useAsync } from "../../utils/use-async";
 import axios from "axios";
 
+import pawImge from "../../assets/cateatfish.svg";
+
 // FIXME
 const apiUrl = "http://121.36.47.113:3000";
 
@@ -39,6 +41,9 @@ export const QuestionnaireFill = () => {
 
   const [loading, setIsLoading] = useState(true);
   const [answer, setAnswer] = useState([]);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // TODO 有些组件上有 id="question.no" 这是啥意思，我怀疑你这里写得有问题
   // 2021-7-13 Anak7n
@@ -60,11 +65,70 @@ export const QuestionnaireFill = () => {
           answer: null,
         };
         answer.push(defaultAnswer);
+        const defaultError = false;
+        errorMessage.push(defaultError);
       }
       setAnswer(answer);
+      setErrorMessage(errorMessage);
       console.log("初始情况下，answer的值", answer);
     }
   }, [questionnaire]);
+
+  useEffect(() => {
+    (async () => {
+      if (questionnaire !== undefined && isSubmit === true) {
+        console.log("点击提交问卷答案");
+        const submitAnswer = {
+          id: questionnaire.id,
+          answer: answer,
+        };
+
+        //判断是否有必填问题未填
+        // FIXME 这里有几个 bug：1. 自动定位；2. 判断文本题未填，应该还要加一个判断是否为空字符
+        for (const question of questionnaire.questions) {
+          const ques_index = questionnaire.questions.indexOf(question);
+          if (
+            question.isNecessary === true &&
+            (answer[ques_index].answer === null ||
+              answer[ques_index].answer === "" ||
+              answer[ques_index].answer.length === 0)
+          ) {
+            console.log("进入这个页面");
+            errorMessage[ques_index] = true;
+          } else {
+            errorMessage[ques_index] = false;
+          }
+        }
+        setErrorMessage(errorMessage);
+        console.log(errorMessage);
+        if (errorMessage.indexOf(true) !== -1) {
+          console.log(errorMessage);
+          setIsSubmit(false);
+          Modal.error({
+            title: "当前问卷还有未填写正确的地方哦",
+            content:
+              "请确保所有问题都已按照要求填写，点击确定页面将提示未按照规范填写的问题",
+            okText: "确定",
+          });
+        } else {
+          console.log("最终提交的问卷答案", submitAnswer);
+          try {
+            await run(
+              axios.post(
+                `${apiUrl}/questionnaires/${openId}/submit`,
+                submitAnswer
+              )
+            );
+            message.success("提交问卷成功");
+            setIsSuccess(true);
+          } catch (e) {
+            // onError(e);
+            message.success("提交问卷失败");
+          }
+        }
+      }
+    })();
+  }, [isSubmit, answer]);
 
   console.log("questionnaire", questionnaire);
 
@@ -74,51 +138,13 @@ export const QuestionnaireFill = () => {
     );
   }
 
-  const onSubmit = async () => {
-    console.log("点击提交问卷答案");
-    const submitAnswer = {
-      id: questionnaire.id,
-      answer: answer,
-    };
-
-    //判断是否有必填问题未填
-    // FIXME 这里有几个 bug：1. 自动定位；2. 判断文本题未填，应该还要加一个判断是否为空字符
-    for (const question of questionnaire.questions) {
-      const question_id = 3;
-      const return_location = "#" + String(question_id);
-      const ques_index = questionnaire.questions.indexOf(question);
-      if (
-        question.isNecessary === true &&
-        (answer[ques_index].answer === null || answer[ques_index].answer === "")
-      ) {
-        console.log("进入这个页面");
-        Modal.error({
-          title: "当前问卷还有未填写正确的地方哦",
-          content:
-            "请确保所有问题都已按照要求填写，点击确定页面将自动定位到第一个未按照规范填写的问题",
-          okText: "确定",
-        });
-        break;
-      }
-    }
-    console.log("最终提交的问卷答案", submitAnswer);
-
-    // 2021-7-13 Anak7n
-    try {
-      await run(
-        axios.post(`${apiUrl}/questionnaires/${openId}/submit`, submitAnswer)
-      );
-      message.success("提交问卷成功");
-    } catch (e) {
-      // onError(e);
-      message.success("提交问卷失败");
-    }
-  };
+  const onSubmit = async () => {};
 
   // 单选题显示
   const SingleChoiceDisplay = (props) => {
     const { question, index } = props;
     const quest_display_id = index + 1;
+    console.log(errorMessage[quest_display_id - 1]);
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
@@ -135,6 +161,13 @@ export const QuestionnaireFill = () => {
             onChange={(e) => {
               answer[index].answer = e.target.value;
               setAnswer(answer);
+              if (e.target.value === null) {
+                errorMessage[index] = true;
+                setErrorMessage(errorMessage);
+              } else {
+                errorMessage[index] = false;
+                setErrorMessage(errorMessage);
+              }
             }}
           >
             <Space direction="vertical">
@@ -148,6 +181,11 @@ export const QuestionnaireFill = () => {
             </Space>
           </Radio.Group>
         </QuestionContent>
+        {errorMessage[quest_display_id - 1] === true ? (
+          <ErrorMessage>请选择选项</ErrorMessage>
+        ) : (
+          <></>
+        )}
         <Divider />
       </Question>
     );
@@ -174,6 +212,13 @@ export const QuestionnaireFill = () => {
               });
               answer[index].answer = checkedValues;
               setAnswer(answer);
+              if (checkedValues.length === 0) {
+                errorMessage[index] = true;
+                setErrorMessage(errorMessage);
+              } else {
+                errorMessage[index] = false;
+                setErrorMessage(errorMessage);
+              }
             }}
           >
             <Space direction="vertical">
@@ -187,6 +232,11 @@ export const QuestionnaireFill = () => {
             </Space>
           </Checkbox.Group>
         </QuestionContent>
+        {errorMessage[quest_display_id - 1] === true ? (
+          <ErrorMessage>请至少选择一个选项</ErrorMessage>
+        ) : (
+          <></>
+        )}
         <Divider />
       </Question>
     );
@@ -196,6 +246,7 @@ export const QuestionnaireFill = () => {
   const SingleLineTextDisplay = (props) => {
     const { question, index } = props;
     const quest_display_id = index + 1;
+    console.log(errorMessage[quest_display_id - 1]);
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
@@ -211,9 +262,21 @@ export const QuestionnaireFill = () => {
             onChange={(e) => {
               answer[index].answer = e.target.value;
               setAnswer(answer);
+              if (e.target.value === "") {
+                errorMessage[index] = true;
+                setErrorMessage(errorMessage);
+              } else {
+                errorMessage[index] = false;
+                setErrorMessage(errorMessage);
+              }
             }}
           ></Input>
         </QuestionContent>
+        {errorMessage[quest_display_id - 1] ? (
+          <ErrorMessage>请输入文本题答案</ErrorMessage>
+        ) : (
+          <></>
+        )}
         <Divider />
       </Question>
     );
@@ -221,14 +284,13 @@ export const QuestionnaireFill = () => {
 
   return isLoading ? (
     <Spin size={"large"} />
-  ) : (
+  ) : isSuccess === false ? (
     <Layout
       className="layout"
       style={{
         display: "flex",
         textAlign: "center",
         alignItems: "center",
-        backgroundImage: "none",
       }}
     >
       <Content
@@ -253,42 +315,43 @@ export const QuestionnaireFill = () => {
             marginBottom: "20",
           }}
         >
-          {questionnaire.questions.map((question, index) => {
-            if (question.type === 0) {
-              return (
-                <SingleChoiceDisplay
-                  id="question.no"
-                  key={generateKey()}
-                  question={question}
-                  index={index}
-                ></SingleChoiceDisplay>
-              );
-            } else if (question.type === 1) {
-              return (
-                <MultipleChoiceDisplay
-                  id="question.no"
-                  key={generateKey()}
-                  question={question}
-                  index={index}
-                ></MultipleChoiceDisplay>
-              );
-            } else {
-              return (
-                <SingleLineTextDisplay
-                  id="question.no"
-                  key={generateKey()}
-                  question={question}
-                  index={index}
-                ></SingleLineTextDisplay>
-              );
+          {questionnaire.questions.map(
+            (question, index, errorMessage, setErrorMessage) => {
+              if (question.type === 0) {
+                return (
+                  <SingleChoiceDisplay
+                    key={generateKey()}
+                    question={question}
+                    index={index}
+                  ></SingleChoiceDisplay>
+                );
+              } else if (question.type === 1) {
+                return (
+                  <MultipleChoiceDisplay
+                    key={generateKey()}
+                    question={question}
+                    index={index}
+                  ></MultipleChoiceDisplay>
+                );
+              } else {
+                return (
+                  <SingleLineTextDisplay
+                    key={generateKey()}
+                    question={question}
+                    index={index}
+                  ></SingleLineTextDisplay>
+                );
+              }
             }
-          })}
+          )}
           <div style={{ paddingBottom: "20px" }}>
             <Button
               loading={submitLoading}
               type="primary"
               size="large"
-              onClick={onSubmit}
+              onClick={() => {
+                setIsSubmit(true);
+              }}
             >
               提交问卷
             </Button>
@@ -297,6 +360,10 @@ export const QuestionnaireFill = () => {
       </Content>
       <Footer>问卷喵 提供技术支持</Footer>
     </Layout>
+  ) : (
+    <SubmitSuccessContent>
+      <SubmitSuccess>您的答卷已提交，感谢您的参与 !</SubmitSuccess>
+    </SubmitSuccessContent>
   );
 };
 
@@ -349,4 +416,38 @@ const QuestionRequire = styled.span`
 const InputDescription = styled(Input)`
   font-size: 18px;
   margin-bottom: 64px;
+`;
+
+const ErrorMessage = styled.div`
+  color: Red;
+  height: 20px;
+  margin-top: 10px;
+  font-size: 15px;
+`;
+
+const SubmitSuccess = styled.div`
+  margin: 40px auto 10px;
+  padding: 30px 0;
+  font-size: 30px;
+  position: relative;
+  height: 100px;
+  width: 500px;
+  text-align: center;
+  background: white;
+  border: 2px, solid, black;
+  position: relative;
+  color: #40a9ff;
+`;
+
+const SubmitSuccessContent = styled.div`
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right bottom;
+  background-image: url(${pawImge});
 `;
