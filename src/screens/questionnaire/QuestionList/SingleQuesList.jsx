@@ -1,4 +1,4 @@
-import { Radio, Space, Divider, Modal } from "antd";
+import { Radio, Space, Divider, Modal, Tooltip } from "antd";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -74,7 +74,7 @@ export const SingleQuesList = (props) => {
               )}
             </SubjectRow>
             <SubjectRow>
-              <RadioGroup>
+              <RadioGroup defaultValue={null}>
                 <Space direction="vertical">
                   {ques_option.map((choice) => {
                     return (
@@ -128,7 +128,7 @@ export const SingleQuesList = (props) => {
   }
 };
 
-const QuestionnaireSubject = styled.div`
+const QuestionnaireSubject = styled(Tooltip)`
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -154,6 +154,7 @@ const RadioRow = styled(Radio)`
   cursor: pointer;
   display: inline-block;
   text-align: left;
+  checked: false;
 `;
 
 const RadioGroup = styled(Radio.Group)`
