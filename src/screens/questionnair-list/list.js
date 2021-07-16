@@ -239,18 +239,16 @@ export const List = ({
                         name: "编辑",
                         handler: () => {
                           status === 2
-                            ? Modal.confirm({
+                            ? Modal.info({
                                 title: `「${questionnaire.title}」正在发布中`,
                                 content: "请先停止发布再进行编辑！",
-                                okText: "确定",
-                                cancelText: "取消",
+                                okText: "知道了",
                               })
                             : status === 3
-                            ? Modal.confirm({
+                            ? Modal.info({
                                 title: `「${questionnaire.title}」已结束`,
                                 content: "不能再进行编辑，请考虑新建问卷！",
-                                okText: "确定",
-                                cancelText: "取消",
+                                okText: "知道了",
                               })
                             : navigate(`${String(id)}/editing`);
                         },
