@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import qiSiCat from "../assets/qisicat.svg";
+// import qiSiCat from "../assets/qisicat.svg";
 import catEatFish from "../assets/cateatfish.svg";
+import peopleCat from "../assets/twopeoplecat.svg";
 // import left from "../assets/left.svg";
 // import right from "../assets/right.svg";
 
@@ -11,7 +12,7 @@ export const Background = styled.div`
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: left bottom, right bottom;
-  background-size: calc(((100vw - 40rem) / 2) - 3.2rem),
-    calc(((100vw - 40rem) / 2) - 3.2rem), cover;
-  background-image: url(${qiSiCat}), url(${catEatFish});
+  background-size: calc(((100vw - 30rem) / 2) - 3.2rem),
+    calc(((100vw - 30rem) / 2) - 3.2rem), cover;
+  background-image: url(${catEatFish}), url(${peopleCat});
 `;

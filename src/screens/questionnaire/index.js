@@ -20,6 +20,17 @@ import { useQuestionnairesQueryKey } from "../questionnair-list/util";
 
 const { Header, Content, Footer, Sider } = Layout;
 
+/**
+ * TODO:
+ *    1. 标题：（添加标题的方式 Helmet，已安装，参考 unauthenticated-app/index.js
+ *       创建/编辑问卷的标题：设计问卷
+ *       预览问卷的标题：电脑预览
+ *       填写问卷的标题：问卷的 title
+ *    2. 显示图片的选择：
+ *       创建/编辑问卷问题为空时：coachcat
+ *       填写问卷 submit 后：qisicat
+ */
+
 export const Questionnaire = () => {
   const location = useLocation();
   const arr = location.pathname.split("/");
