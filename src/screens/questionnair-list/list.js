@@ -31,10 +31,11 @@ import {
   CloudDownloadOutlined,
   ClockCircleOutlined,
   CopyOutlined,
+  FileDoneOutlined,
 } from "@ant-design/icons";
 import { PageHeaderSkeletons } from "./pageheader-skeleton";
 import copy from "copy-to-clipboard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { download } from "../../utils/excel";
 import { EndTimePicker } from "./end-time-picker";
 import { CopyQuestionnaire } from "./copy-questionnaire";
@@ -222,6 +223,13 @@ export const List = ({
                         <Link to={`${String(id)}/analysis`}>统计分析</Link>
                       </ButtonNoPadding>,
                       <ButtonNoPadding
+                        icon={<FileDoneOutlined />}
+                        type={"link"}
+                      >
+                        <span> </span>
+                        <Link to={`${String(id)}/answers`}>所有答卷</Link>
+                      </ButtonNoPadding>,
+                      <ButtonNoPadding
                         icon={<CloudDownloadOutlined />}
                         type={"link"}
                         onClick={() => download(id)}
@@ -281,7 +289,7 @@ export const List = ({
                                   }
                                 })
                                 .catch((e) => {
-                                  message.error(`删除「${title}」成功`);
+                                  message.error(`删除「${title}」失败`);
                                 });
                             },
                           });

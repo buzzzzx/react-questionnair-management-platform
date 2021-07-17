@@ -8,9 +8,10 @@ import { QuestionnairePreview } from "../questionnaire-preview";
 import { QuestionnaireAnalysis } from "../questionnaire-analysis";
 import { QuestionnaireFill } from "../questionnaire-fill";
 import React from "react";
+import { QuestionnaireAnswerList } from "../questionnaire-answer-list";
 
 export const AuthenticatedApp = () => {
-  // 路由：创建问卷，编辑问卷，预览，统计分析
+  // 路由：创建问卷，编辑问卷，预览，统计分析，所有答卷
   // TODO 其他模块页面的 title
 
   return (
@@ -37,6 +38,10 @@ export const AuthenticatedApp = () => {
           <Route
             path={"/questionnaires/:id/analysis"}
             element={<QuestionnaireAnalysis />}
+          />
+          <Route
+            path={"/questionnaires/:id/answers"}
+            element={<QuestionnaireAnswerList />}
           />
           <Route path={"/fill/*"} element={<QuestionnaireFill />} />
           <Navigate to={"/questionnaires"} />

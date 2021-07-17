@@ -1,6 +1,6 @@
 import { cleanObject, subset } from "./index";
 import { useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export const useUrlQueryParam = (keys) => {
   const [searchParams] = useSearchParams();
@@ -27,4 +27,11 @@ export const useSetUrlQueryParams = () => {
     // TODO /questionnaires?
     return setSearchParams(o);
   };
+};
+
+export const useQuestionnaireId = () => {
+  const location = useLocation();
+
+  const arr = location.pathname.split("/");
+  return arr[arr.length - 2];
 };
