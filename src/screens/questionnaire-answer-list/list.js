@@ -5,8 +5,8 @@ import { Pin } from "../../components/pin";
 import dayjs from "dayjs";
 import { DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 
-export const List = ({ id, list, loading }) => {
-  const answersQueryKey = useAnswersQueryKey(id);
+export const List = ({ questionnaireId, list, loading }) => {
+  const answersQueryKey = useAnswersQueryKey(questionnaireId);
   const { mutate } = usePinAnswer(answersQueryKey);
   const pinAnswer = (answerId) => (pin) => mutate({ answerId, pin });
   const { mutateAsync: deleteSingleAnswer } = useDeleteAnswer(answersQueryKey);
@@ -17,8 +17,9 @@ export const List = ({ id, list, loading }) => {
     <Table
       rowKey={"answerId"}
       pagination={{
-        total: list.length,
+        total: list?.length,
         defaultCurrent: 1,
+        defaultPageSize: 5,
         // showQuickJumper: true,
         // showSizeChanger: true,
       }}
@@ -55,20 +56,15 @@ export const List = ({ id, list, loading }) => {
         },
         {
           title: (
-            <Tooltip
-              placement={"topRight"}
-              title={
-                "由于 IP 存在变换，根据 IP 获得的位置信息无法保证 100% 准确"
-              }
-            >
+            <Tooltip placement={"topRight"} title={"答卷时的 IP 地址"}>
               来自 IP
             </Tooltip>
           ),
           render(value, answer) {
             return (
-              <Tooltip placement="bottomRight" title={answer.ip}>
-                <span>{answer.location}</span>
-              </Tooltip>
+              // <Tooltip placement="bottomRight" title={answer.ip}>
+              <span>{answer.ip}</span>
+              // </Tooltip>
             );
           },
         },
@@ -95,7 +91,7 @@ export const List = ({ id, list, loading }) => {
                         okText: "确定",
                         cancelText: "取消",
                         onOk() {
-                          deleteSingleAnswer({ id })
+                          deleteSingleAnswer(answer.answerId)
                             .then(() => {
                               message.success(`删除答卷成功`);
                             })

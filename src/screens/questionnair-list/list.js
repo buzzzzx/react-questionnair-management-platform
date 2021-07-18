@@ -235,7 +235,7 @@ export const List = ({
                         onClick={() => download(id)}
                       >
                         <span> </span>
-                        导出 Excel
+                        导出统计分析
                       </ButtonNoPadding>,
                     ]}
                   />,

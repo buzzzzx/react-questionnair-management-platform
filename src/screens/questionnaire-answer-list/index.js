@@ -8,42 +8,40 @@ import { useQuestionnaire } from "../../utils/questionnaire";
 import { useAnswersQueryKey, useAnswersSearchParam } from "./util";
 import { message, Modal } from "antd";
 import { AnswerSelector } from "./answer-selector";
-import { set } from "husky";
 
 export const QuestionnaireAnswerList = () => {
   // TODO 答卷为 0 的时候
   const [param, setParam] = useAnswersSearchParam();
   const id = useQuestionnaireId();
-  // const { data: answers, loading, error } = useAnswers(id, param);
+  const { data: answers, loading, error } = useAnswers(id, param);
   const { mutateAsync: deleteAllAnswers } = useDeleteAnswers(
     useAnswersQueryKey(id)
   );
   const { data: questionnaire } = useQuestionnaire(id);
 
-  // 測試數據
-  const answers = [
-    {
-      answerId: 12,
-      pin: 1,
-      ip: "233.222.222.222",
-      location: "四川成都",
-      answerTime: 1626491463,
-      answerDuration: 8,
-    },
-    {
-      answerId: 13,
-      pin: 2,
-      ip: "233.112.222.222",
-      location: "重庆",
-      answerTime: 1626491363,
-      answerDuration: 10,
-    },
-  ];
-  const loading = false;
-  const error = undefined;
+  // // 測試數據
+  // const answers = [
+  //   {
+  //     answerId: 12,
+  //     pin: 1,
+  //     ip: "233.222.222.222",
+  //     location: "四川成都",
+  //     answerTime: 1626491463,
+  //     answerDuration: 8,
+  //   },
+  //   {
+  //     answerId: 13,
+  //     pin: 2,
+  //     ip: "233.112.222.222",
+  //     location: "重庆",
+  //     answerTime: 1626491363,
+  //     answerDuration: 10,
+  //   },
+  // ];
+  // const loading = false;
+  // const error = undefined;
 
   const deleteHandler = () => {
-    console.log("删除所有答卷");
     Modal.confirm({
       title: `确定清空所有答卷吗？`,
       content: "请注意，清空所有答卷将无法恢复！",
@@ -51,6 +49,7 @@ export const QuestionnaireAnswerList = () => {
       cancelText: "取消",
       onOk() {
         const deletes = answers.map((answer) => answer.answerId);
+        console.log(answers, deletes);
         deleteAllAnswers({ ids: deletes })
           .then(() => {
             message.success("清空答卷成功");

@@ -20,7 +20,7 @@ export const useQuestionnaires = (params = {}) => {
     {
       // Refetch the data every intervalMs
       // https://react-query.tanstack.com/examples/auto-refetching
-      refetchInterval: intervalMs,
+      // refetchInterval: intervalMs,
     }
   );
 };

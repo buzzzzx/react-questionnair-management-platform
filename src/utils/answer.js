@@ -17,8 +17,8 @@ export const useAnswers = (id, param) => {
 export const useDeleteAnswer = (queryKey) => {
   const client = useHttp();
   return useMutation(
-    ({ id }) =>
-      client(`/answers/${id}`, {
+    (id) =>
+      client(`answers/${id}`, {
         method: "DELETE",
       }),
     useDeleteConfig(queryKey)
