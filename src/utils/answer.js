@@ -1,15 +1,19 @@
 import { useHttp } from "./http";
 import { useMutation, useQuery } from "react-query";
-import { useDeleteConfig, useEditConfig } from "./use-optimistic-udpate";
+import {
+  useDeleteConfig,
+  useEditAnswerConfig,
+  useEditConfig,
+} from "./use-optimistic-udpate";
 import { cleanObject } from "./index";
 
 export const useAnswers = (id, param) => {
   const client = useHttp();
 
-  return useQuery(["answers", { ...param, id }], () =>
+  return useQuery(["answers", { ...param, id: Number(id) }], () =>
     client(`questionnaires/${id}/answers`, {
       method: "GET",
-      data: cleanObject(param),
+      data: cleanObject(param || {}),
     })
   );
 };
@@ -42,11 +46,11 @@ export const usePinAnswer = (queryKey) => {
 
   return useMutation(
     (param) =>
-      client(`answers/${param.id}`, {
+      client(`answers/${param.answerId}`, {
         data: param,
         method: "PATCH",
       }),
-    useEditConfig(queryKey)
+    useEditAnswerConfig(queryKey)
   );
 };
 

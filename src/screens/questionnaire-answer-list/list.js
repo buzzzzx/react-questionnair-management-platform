@@ -8,7 +8,10 @@ import { DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 export const List = ({ questionnaireId, list, loading }) => {
   const answersQueryKey = useAnswersQueryKey(questionnaireId);
   const { mutate } = usePinAnswer(answersQueryKey);
-  const pinAnswer = (answerId) => (pin) => mutate({ answerId, pin });
+  const pinAnswer = (answerId) => (pin) => {
+    console.log("answerId pin", answerId, pin);
+    mutate({ answerId, pin: pin === true ? 2 : 1 });
+  };
   const { mutateAsync: deleteSingleAnswer } = useDeleteAnswer(answersQueryKey);
 
   // TODO 点击查看 Link 到答卷查看页面
@@ -31,7 +34,7 @@ export const List = ({ questionnaireId, list, loading }) => {
           render(value, answer) {
             return (
               <Pin
-                checked={answer.pin}
+                checked={answer.pin === 2}
                 onCheckedChange={pinAnswer(answer.answerId)}
               />
             );

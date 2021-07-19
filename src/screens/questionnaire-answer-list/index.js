@@ -10,36 +10,13 @@ import { message, Modal } from "antd";
 import { AnswerSelector } from "./answer-selector";
 
 export const QuestionnaireAnswerList = () => {
-  // TODO 答卷为 0 的时候
   const [param, setParam] = useAnswersSearchParam();
   const id = useQuestionnaireId();
-  const { data: answers, loading, error } = useAnswers(id, param);
+  const { data: answers = [], isLoading, error } = useAnswers(id, param);
   const { mutateAsync: deleteAllAnswers } = useDeleteAnswers(
     useAnswersQueryKey(id)
   );
   const { data: questionnaire } = useQuestionnaire(id);
-
-  // // 測試數據
-  // const answers = [
-  //   {
-  //     answerId: 12,
-  //     pin: 1,
-  //     ip: "233.222.222.222",
-  //     location: "四川成都",
-  //     answerTime: 1626491463,
-  //     answerDuration: 8,
-  //   },
-  //   {
-  //     answerId: 13,
-  //     pin: 2,
-  //     ip: "233.112.222.222",
-  //     location: "重庆",
-  //     answerTime: 1626491363,
-  //     answerDuration: 10,
-  //   },
-  // ];
-  // const loading = false;
-  // const error = undefined;
 
   const deleteHandler = () => {
     Modal.confirm({
@@ -74,7 +51,7 @@ export const QuestionnaireAnswerList = () => {
       </Row>
       <AnswerSelector param={param} setParam={setParam} />
       <ErrorBox error={error} />
-      <List questionnaireId={id} list={answers} loading={loading} />
+      <List questionnaireId={id} list={answers} loading={isLoading} />
     </ScreenContainer>
   );
 };
