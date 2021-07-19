@@ -32,3 +32,12 @@ export const useDeleteConfig = (queryKey) =>
     queryKey,
     (target, old) => old?.filter((item) => item.id !== target.id) || []
   );
+
+export const useEditAnswerConfig = (queryKey) =>
+  useConfig(
+    queryKey,
+    (target, old) =>
+      old?.map((item) =>
+        item.answerId === target.answerId ? { ...item, ...target } : item
+      ) || []
+  );

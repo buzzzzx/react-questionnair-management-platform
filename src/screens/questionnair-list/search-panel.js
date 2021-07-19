@@ -1,7 +1,6 @@
 import { Form, Input, Select } from "antd";
 
 export const SearchPanel = ({ params, setParams }) => {
-  // TODO 已结束
   return (
     <Form css={{ marginBottom: "4rem" }} layout={"inline"}>
       <Form.Item>
