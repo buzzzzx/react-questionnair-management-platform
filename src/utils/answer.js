@@ -49,3 +49,13 @@ export const usePinAnswer = (queryKey) => {
     useEditConfig(queryKey)
   );
 };
+
+export const useAnswer = (id) => {
+  const client = useHttp();
+
+  return useQuery(["answer", { id }], () =>
+    client(`answers/${id}`, {
+      method: "GET",
+    })
+  );
+};
