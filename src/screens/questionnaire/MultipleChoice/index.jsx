@@ -68,7 +68,6 @@ export const MultipleChoice = (props) => {
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log(oldIndex, newIndex);
     setChoiceOption(arrayMove(option, oldIndex, newIndex));
   };
 
@@ -129,7 +128,6 @@ export const MultipleChoice = (props) => {
       editQues.remarks = questionItem.remarks;
       editQues.option = questionItem.option;
       setQuestionList(questionList);
-      console.log(questionList);
       setEditorStatus("NotEdit");
       setEditorType(null);
       setIsUpdate(false);

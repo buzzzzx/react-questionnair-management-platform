@@ -60,15 +60,11 @@ export const SingleLineText = (props) => {
   };
 
   const cancel = () => {
-    console.log("取消编辑");
     setEditorStatus("NotEdit");
     setEditorType(null);
     if (isUpdate) {
-      console.log(typeof setIsUpdate);
       setIsUpdate(false);
-      console.log(isUpdate);
     }
-    console.log(editorStatus, editorType, isUpdate);
   };
 
   return (

@@ -93,7 +93,6 @@ export const SingleQuesList = (props) => {
                     <FormOutlined
                       onClick={() => {
                         setIsEdit(true);
-                        console.log("当前进入编辑状态", isEdit);
                       }}
                     />
                   </SubjectBarButton>
@@ -111,7 +110,6 @@ export const SingleQuesList = (props) => {
       </>
     );
   } else {
-    console.log("开始编辑问题");
     return (
       <SingleChoice
         questionList={questionList}

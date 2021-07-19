@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Layout, Input, Button, Modal } from "antd";
 import "antd/dist/antd.css";
 import styled from "@emotion/styled";
+import { Helmet } from "react-helmet";
+import Tour from "reactour";
 
 import { Editor } from "./Editor";
 import { LeftSide } from "./LeftSide";
@@ -19,17 +21,6 @@ import {
 import { useQuestionnairesQueryKey } from "../questionnair-list/util";
 
 const { Header, Content, Footer, Sider } = Layout;
-
-/**
- * TODO:
- *    1. 标题：（添加标题的方式 Helmet，已安装，参考 unauthenticated-app/index.js
- *       创建/编辑问卷的标题：设计问卷
- *       预览问卷的标题：电脑预览
- *       填写问卷的标题：问卷的 title
- *    2. 显示图片的选择：
- *       创建/编辑问卷问题为空时：coachcat
- *       填写问卷 submit 后：qisicat
- */
 
 export const Questionnaire = () => {
   const location = useLocation();
@@ -74,7 +65,7 @@ export const Questionnaire = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
-  console.log(questionList);
+  const [isTourOpen, setIsTourOpen] = useState(true);
 
   useEffect(() => {
     if (!isLoading && editingQuestionnaire !== undefined) {
@@ -83,6 +74,32 @@ export const Questionnaire = () => {
       setDescription(editingQuestionnaire.description);
     }
   }, [isLoading, editingQuestionnaire]);
+
+  // 用户引导
+  const steps = [
+    {
+      selector: ".questionnaire_title",
+      content: "在这里输入问卷标题",
+      position: "bottom",
+    },
+    {
+      selector: ".questionnaire_description",
+      content: "在这里输入问卷描述信息（可选）",
+    },
+    {
+      selector: ".questionnaire_items",
+      content: "在这里选择问题控件，创建对应类型的问题",
+    },
+    {
+      selector: ".questionnaire_questions",
+      content:
+        "创建好的问题会显示在这里，你可以在这个区域对创建好的问题进行编辑、删除操作，还可以通过拖拽改变问题的顺序",
+    },
+    {
+      selector: ".questionnaire_finish",
+      content: "问卷创建好后，点击完成编辑按钮，提交问卷",
+    },
+  ];
 
   const onFinish = () => {
     const questionnaire = {
@@ -103,7 +120,6 @@ export const Questionnaire = () => {
     } else {
       console.log("最终提交的问卷", questionnaire);
       const response = mutateAsync(questionnaire);
-      console.log("resoponse", response);
       response.then((result) => {
         const sucessContent = editingQuestionnaire
           ? "编辑问卷成功，请点击确定返回首页"
@@ -177,6 +193,9 @@ export const Questionnaire = () => {
     ) {
       return (
         <Layout>
+          <Helmet>
+            <title>设计问卷</title>
+          </Helmet>
           <Sider
             style={{
               overflow: "auto",
@@ -198,6 +217,7 @@ export const Questionnaire = () => {
               style={{ padding: 0, textAlign: "right" }}
             >
               <Input
+                className="questionnaire_finish"
                 type="button"
                 value="完成编辑"
                 placeholder="Borderless"
@@ -235,6 +255,7 @@ export const Questionnaire = () => {
               >
                 <QuestionnaireTitle>
                   <InputTitle
+                    className="questionnaire_title"
                     placeholder="问卷标题"
                     value={questionnaireTitle}
                     onChange={(event) => {
@@ -243,25 +264,35 @@ export const Questionnaire = () => {
                   />
                 </QuestionnaireTitle>
                 <InputDescription
+                  className="questionnaire_description"
                   placeholder="添加问卷说明"
                   value={description}
                   onChange={(e) => {
                     setDescription(e.target.value);
                   }}
                 ></InputDescription>
-                <Editor></Editor>
+                <Editor className="questionnaire_questions"></Editor>
               </div>
             </Content>
             <Footer style={{ textAlign: "center", backgroundColor: "white" }}>
               问卷喵 提供技术支持
             </Footer>
           </Layout>
+          <Tour
+            steps={steps}
+            isOpen={isTourOpen}
+            onRequestClose={() => {
+              setIsTourOpen(false);
+            }}
+          />
         </Layout>
       );
     } else if (editorStatus === "NotEdit" && questionList.length > 0) {
-      console.log("上面展示问卷列表，下面展示问题创建");
       return (
         <Layout>
+          <Helmet>
+            <title>设计问卷</title>
+          </Helmet>
           <Sider
             style={{
               overflow: "auto",
@@ -288,7 +319,6 @@ export const Questionnaire = () => {
                 autoFocus={true}
                 onMouseOver={(e) => {
                   e.target.bordered = true;
-                  console.log(e.target.bordered);
                 }}
                 onMouseLeave={(e) => {
                   e.target.bordered = false;
@@ -357,6 +387,9 @@ export const Questionnaire = () => {
       if (editorType === "SingleChoice") {
         return (
           <Layout>
+            <Helmet>
+              <title>设计问卷</title>
+            </Helmet>
             <Sider
               style={{
                 overflow: "auto",
@@ -458,6 +491,9 @@ export const Questionnaire = () => {
       } else if (editorType === "MultipleChoice") {
         return (
           <Layout>
+            <Helmet>
+              <title>设计问卷</title>
+            </Helmet>
             <Sider
               style={{
                 overflow: "auto",
@@ -556,9 +592,11 @@ export const Questionnaire = () => {
           </Layout>
         );
       } else {
-        console.log("当前编辑类型:SingleLineText");
         return (
           <Layout>
+            <Helmet>
+              <title>设计问卷</title>
+            </Helmet>
             <Sider
               style={{
                 overflow: "auto",

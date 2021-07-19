@@ -16,7 +16,12 @@ export const LeftSide = (props) => {
   return (
     <>
       <QuestionItem>问题控件</QuestionItem>
-      <Menu theme="dark" mode="inline" selectedKeys={selectedKey}>
+      <Menu
+        className="questionnaire_items"
+        theme="dark"
+        mode="inline"
+        selectedKeys={selectedKey}
+      >
         <Menu.Item
           key="1"
           icon={<CheckCircleOutlined />}

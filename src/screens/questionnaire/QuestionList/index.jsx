@@ -29,9 +29,7 @@ export const QuestionList = (props) => {
   }
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
-    console.log(oldIndex, newIndex);
     setQuestionList(arrayMove(questionList, oldIndex, newIndex));
-    console.log("交换后的questionList", questionList);
   };
 
   const SortableList = SortableContainer(({ children }) => {
@@ -51,9 +49,7 @@ export const QuestionList = (props) => {
       isUpdate,
       setIsUpdate,
     }) => {
-      console.log("接收到的questionItem", questionItem);
       if (questionItem.type === 0) {
-        console.log("当前显示的问题类型为单选题");
         return (
           <SingleQuesList
             ques_id={ques_id}
@@ -69,7 +65,6 @@ export const QuestionList = (props) => {
           ></SingleQuesList>
         );
       } else if (questionItem.type === 1) {
-        console.log("当前显示的问题类型为多选题");
         return (
           <MultipleQuesList
             ques_id={ques_id}
@@ -85,7 +80,6 @@ export const QuestionList = (props) => {
           ></MultipleQuesList>
         );
       } else {
-        console.log("当前显示的问题类型为单行文本题");
         return (
           <SingleLineQuesList
             ques_id={ques_id}

@@ -12,6 +12,7 @@ import {
   Modal,
   Anchor,
 } from "antd";
+import { Helmet } from "react-helmet";
 import { useQuestionnaire } from "../../utils/questionnaire";
 
 export const QuestionnairePreview = () => {
@@ -135,6 +136,9 @@ export const QuestionnairePreview = () => {
         backgroundImage: "none",
       }}
     >
+      <Helmet>
+        <title>电脑预览</title>
+      </Helmet>
       <Content
         style={{
           padding: "10 50px",

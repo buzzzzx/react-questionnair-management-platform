@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Input, Image, Divider } from "antd";
 import "antd/dist/antd.css";
 
-import editorcontent from "../../assets/editor_content.png";
+import editorcontent from "../../assets/coachcat.svg";
 
 export const Editor = () => {
   return (
@@ -28,7 +28,7 @@ const QuesitonnairePageText = styled.div`
 `;
 
 const QuestionnaireImage = styled(Image)`
-  width: 300px;
+  width: 350px;
   display: block;
   height: auto;
   justify-content: center;
