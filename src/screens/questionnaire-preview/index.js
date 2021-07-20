@@ -10,7 +10,6 @@ import {
   Layout,
   Button,
   Modal,
-  Anchor,
 } from "antd";
 import { Helmet } from "react-helmet";
 import { useQuestionnaire } from "../../utils/questionnaire";
@@ -211,15 +210,6 @@ export const QuestionnairePreview = () => {
     </Layout>
   );
 };
-
-// const Questions = styled.div`
-//   width: 100%;
-//   text-align: center;
-//   align-items: center;
-//   justify-content: center;
-//   height: 95%;
-//   overflow: visible;
-// `;
 
 const Title = styled.div`
   font-size: 35px;

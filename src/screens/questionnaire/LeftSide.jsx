@@ -3,14 +3,12 @@ import { useState } from "react";
 import {
   CheckCircleOutlined,
   CheckSquareOutlined,
-  CodeSandboxCircleFilled,
   MinusSquareOutlined,
 } from "@ant-design/icons";
 import { Menu, Modal } from "antd";
-import { Content } from "antd/lib/layout/layout";
 
 export const LeftSide = (props) => {
-  const { editorStatus, setEditorStatus, editorType, setEditorType } = props;
+  const { editorStatus, setEditorStatus, setEditorType } = props;
   const [selectedKey, setSelectKey] = useState(null);
 
   return (

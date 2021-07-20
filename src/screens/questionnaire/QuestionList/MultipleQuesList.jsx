@@ -15,8 +15,6 @@ export const MultipleQuesList = (props) => {
     setEditorStatus,
     editorType,
     setEditorType,
-    isUpdate,
-    setIsUpdate,
   } = props;
   const [hovering, setHovering] = useState(false);
   const [isEdit, setIsEdit] = useState(false);

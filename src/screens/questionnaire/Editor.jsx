@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Input, Image, Divider } from "antd";
+import { Image, Divider } from "antd";
 import "antd/dist/antd.css";
 
 import editorcontent from "../../assets/coachcat.svg";

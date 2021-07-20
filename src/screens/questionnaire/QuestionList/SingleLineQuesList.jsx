@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormOutlined, DeleteOutlined } from "@ant-design/icons";
 import { SingleLineText } from "../SingleLineText";
-import { Content } from "antd/lib/layout/layout";
 
 export const SingleLineQuesList = (props) => {
   const {
@@ -15,8 +14,6 @@ export const SingleLineQuesList = (props) => {
     setEditorStatus,
     editorType,
     setEditorType,
-    isUpdate,
-    setIsUpdate,
   } = props;
   const [hovering, setHovering] = useState(false);
   const [isEdit, setIsEdit] = useState(false);

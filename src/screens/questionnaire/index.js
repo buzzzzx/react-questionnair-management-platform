@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout, Input, Button, Modal } from "antd";
+import { Layout, Input, Modal } from "antd";
 import "antd/dist/antd.css";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet";

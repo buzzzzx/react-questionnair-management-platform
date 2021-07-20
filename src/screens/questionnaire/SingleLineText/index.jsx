@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { AliwangwangOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { AliwangwangOutlined } from "@ant-design/icons";
 import { Input, Checkbox, Button, Form } from "antd";
 import { useState } from "react";
 
@@ -7,9 +7,7 @@ export const SingleLineText = (props) => {
   const {
     questionList,
     setQuestionList,
-    editorStatus,
     setEditorStatus,
-    editorType,
     setEditorType,
     isUpdate,
     currQues,

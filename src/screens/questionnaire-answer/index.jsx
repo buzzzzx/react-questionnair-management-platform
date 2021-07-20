@@ -13,23 +13,16 @@ export const QuestionnaireAnswer = () => {
   const quest_id = arr[2];
   const answer_id = arr[4];
   // GET 答卷内容
-  const { data: answers, isLoading, error } = useAnswer(answer_id);
+  const { data: answers, isLoading } = useAnswer(answer_id);
 
   // GET 问卷内容
-  const {
-    data: questionnaire,
-    isLoading2,
-    error2,
-  } = useQuestionnaire(quest_id);
+  const { data: questionnaire, isLoading2 } = useQuestionnaire(quest_id);
 
   function generateKey() {
     return Number(Math.random().toString().substr(3, 5) + Date.now()).toString(
       36
     );
   }
-
-  console.log("answers", answers);
-  console.log("questionnaire", questionnaire);
 
   const { Content, Footer } = Layout;
 
@@ -40,7 +33,7 @@ export const QuestionnaireAnswer = () => {
   const [isView, setIsView] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !isLoading2) {
+    if (questionnaire !== undefined && answers !== undefined) {
       const currentAnswer = answers.answer.map((item) => item.answer);
       setAnswer(currentAnswer);
       const currentQuestions = questionnaire.questions;
