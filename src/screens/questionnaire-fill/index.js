@@ -299,9 +299,9 @@ export const QuestionnaireFill = () => {
       >
         <Title>{questionnaire.title}</Title>
         {questionnaire.description === null ? (
-          <InputDescription>{questionnaire.description}</InputDescription>
-        ) : (
           <></>
+        ) : (
+          <InputDescription>{questionnaire.description}</InputDescription>
         )}
         <Divider />
         <div
@@ -400,7 +400,7 @@ const QuestionRequire = styled.span`
   margin-left: 5px;
 `;
 
-const InputDescription = styled(Input)`
+const InputDescription = styled.div`
   font-size: 18px;
   margin-bottom: 64px;
 `;

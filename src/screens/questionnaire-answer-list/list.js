@@ -4,6 +4,7 @@ import { Table, Tooltip, Pagination, Button, Modal, message } from "antd";
 import { Pin } from "../../components/pin";
 import dayjs from "dayjs";
 import { DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router";
 
 export const List = ({ questionnaireId, list, loading }) => {
   const answersQueryKey = useAnswersQueryKey(questionnaireId);
@@ -13,6 +14,7 @@ export const List = ({ questionnaireId, list, loading }) => {
     mutate({ answerId, pin: pin === true ? 2 : 1 });
   };
   const { mutateAsync: deleteSingleAnswer } = useDeleteAnswer(answersQueryKey);
+  const navigate = useNavigate();
 
   // TODO 点击查看 Link 到答卷查看页面
 
@@ -80,7 +82,9 @@ export const List = ({ questionnaireId, list, loading }) => {
                   <Button
                     icon={<FileSearchOutlined />}
                     type={"link"}
-                    onClick={() => {}}
+                    onClick={() => {
+                      navigate(`${String(answer.answerId)}`);
+                    }}
                   />
                 </Tooltip>
                 <Tooltip title={"删除"}>

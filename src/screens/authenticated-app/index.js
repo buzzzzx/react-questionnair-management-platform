@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import { QuestionnairePreview } from "../questionnaire-preview";
 import { QuestionnaireAnalysis } from "../questionnaire-analysis";
 import { QuestionnaireFill } from "../questionnaire-fill";
+import { QuestionnaireAnswer } from "../questionnaire-answer";
 import React from "react";
 import { QuestionnaireAnswerList } from "../questionnaire-answer-list";
 
@@ -45,6 +46,10 @@ export const AuthenticatedApp = () => {
           />
           <Route path={"/fill/*"} element={<QuestionnaireFill />} />
           <Navigate to={"/questionnaires"} />
+          <Route
+            path={"/questionnaires/:id/answers/:id"}
+            element={<QuestionnaireAnswer />}
+          />
         </Routes>
       </Main>
     </Container>
