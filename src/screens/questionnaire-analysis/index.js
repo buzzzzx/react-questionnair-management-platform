@@ -76,10 +76,10 @@ export const QuestionnaireAnalysis = () => {
               icon={<ContainerOutlined />}
               title="问卷统计分析"
             >
-              {questionList?.questions?.map((question) => {
+              {questionList?.questions?.map((question, index) => {
                 return (
                   <Menu.Item
-                    key={question.no}
+                    key={index}
                     onClick={() => {
                       console.log(question);
                       setIfquestion((ifquestion = true));
@@ -88,7 +88,7 @@ export const QuestionnaireAnalysis = () => {
                       console.log(statistic);
                     }}
                   >
-                    题目{question.no}
+                    题目{index + 1}
                   </Menu.Item>
                 );
               })}
