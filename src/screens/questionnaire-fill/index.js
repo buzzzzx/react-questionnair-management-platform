@@ -275,7 +275,12 @@ export const QuestionnaireFill = () => {
   };
 
   return isLoading ? (
-    <Spin size={"large"} />
+    <Spin
+      size={"large"}
+      style={{
+        margin: "10rem auto",
+      }}
+    />
   ) : isSuccess === false ? (
     <Layout
       className="layout"

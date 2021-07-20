@@ -8,7 +8,7 @@ import {
 } from "./use-optimistic-udpate";
 
 export const useQuestionnaires = (params = {}) => {
-  const intervalMs = 1000;
+  // const intervalMs = 1000;
   const client = useHttp();
 
   return useQuery(

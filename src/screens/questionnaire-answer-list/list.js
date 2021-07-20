@@ -5,6 +5,7 @@ import { Pin } from "../../components/pin";
 import dayjs from "dayjs";
 import { DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 export const List = ({ questionnaireId, list, loading }) => {
   const answersQueryKey = useAnswersQueryKey(questionnaireId);
@@ -15,8 +16,6 @@ export const List = ({ questionnaireId, list, loading }) => {
   };
   const { mutateAsync: deleteSingleAnswer } = useDeleteAnswer(answersQueryKey);
   const navigate = useNavigate();
-
-  // TODO 点击查看 Link 到答卷查看页面
 
   return (
     <Table

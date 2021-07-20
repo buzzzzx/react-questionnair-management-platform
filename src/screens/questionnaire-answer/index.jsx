@@ -134,7 +134,12 @@ export const QuestionnaireAnswer = () => {
   };
 
   return isView === false ? (
-    <Spin size={"large"} />
+    <Spin
+      size={"large"}
+      style={{
+        margin: "10rem auto",
+      }}
+    />
   ) : (
     <Layout
       className="layout"
