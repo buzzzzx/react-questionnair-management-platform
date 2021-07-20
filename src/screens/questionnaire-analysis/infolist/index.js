@@ -17,20 +17,26 @@ class Infolist extends React.Component {
     data.push(num);
     var last_edit_time =
       "最后一次编辑时间:  " +
-      dayjs(this.props.questionlist?.lastEditedTime).format(
-        "YYYY/MM/DD  HH:mm"
-      );
+      (this.props.questionlist?.lastEditedTime === null
+        ? "无"
+        : dayjs(this.props.questionlist?.lastEditedTime).format(
+            "YYYY/MM/DD  HH:mm"
+          ));
     data.push(last_edit_time);
     var lauch_time =
       "发布时间:  " +
-      dayjs(this.props.questionlist?.releaseTime).format("YYYY/MM/DD  HH:mm");
+      (this.props.questionlist?.releaseTime === null
+        ? "无"
+        : dayjs(this.props.questionlist?.releaseTime).format(
+            "YYYY/MM/DD  HH:mm"
+          ));
     data.push(lauch_time);
     var deadline =
       "截止时间:  " +
-      dayjs(this.props.questionlist?.endTime).format("YYYY/MM/DD  HH:mm");
+      (this.props.questionlist?.endTime === null
+        ? "无"
+        : dayjs(this.props.questionlist?.endTime).format("YYYY/MM/DD  HH:mm"));
     data.push(deadline);
-    console.log("dddddddddd");
-    console.log(data);
     return (
       <div>
         <Divider orientation="center">问卷信息</Divider>
