@@ -1,10 +1,6 @@
 import { useHttp } from "./http";
 import { useMutation, useQuery } from "react-query";
-import {
-  useDeleteConfig,
-  useEditAnswerConfig,
-  useEditConfig,
-} from "./use-optimistic-udpate";
+import { useDeleteConfig, useEditAnswerConfig } from "./use-optimistic-udpate";
 import { cleanObject } from "./index";
 
 export const useAnswers = (id, param) => {

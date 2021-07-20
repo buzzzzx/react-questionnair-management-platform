@@ -45,11 +45,11 @@ export const AuthenticatedApp = () => {
             element={<QuestionnaireAnswerList />}
           />
           <Route path={"/fill/*"} element={<QuestionnaireFill />} />
-          <Navigate to={"/questionnaires"} />
           <Route
             path={"/questionnaires/:id/answers/:id"}
             element={<QuestionnaireAnswer />}
           />
+          <Navigate to={"/questionnaires"} />
         </Routes>
       </Main>
     </Container>

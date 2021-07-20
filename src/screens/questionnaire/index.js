@@ -118,7 +118,6 @@ export const Questionnaire = () => {
         content: errorContent,
       });
     } else {
-      console.log("最终提交的问卷", questionnaire);
       const response = mutateAsync(questionnaire);
       response.then((result) => {
         const sucessContent = editingQuestionnaire

@@ -16,6 +16,8 @@
     "copy-to-clipboard": "^3.3.1",
     "craco-less": "^1.17.1",
     "dayjs": "^1.10.5",
+    "echarts": "^5.1.2",
+    "echarts-for-react": "^3.0.1",
     "history": "^5.0.0",
     "moment": "^2.29.1",
     "qs": "^6.10.1",
@@ -40,6 +42,8 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "prepare": "husky install",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build -r git@github.com:questionnairemeow/questionnairemeow.github.io -b main",
     "json-server": "json-server __json_server_mock__/db.json --watch --port 3001"
   },
   "eslintConfig": {
@@ -65,6 +69,7 @@
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "eslint-config-prettier": "^8.3.0",
+    "gh-pages": "^3.2.3",
     "husky": ">=6",
     "json-server": "^0.16.3",
     "lint-staged": ">=10",
