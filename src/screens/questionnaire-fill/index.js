@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useDeepCompareEffect } from "react-use";
+import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
 import { useFillQuestionnaire } from "../../utils/questionnaire";
 import {
@@ -19,7 +21,7 @@ import "antd/dist/antd.css";
 import { useAsync } from "../../utils/use-async";
 import axios from "axios";
 
-import pawImge from "../../assets/cateatfish.svg";
+import pawImge from "../../assets/qisicat.svg";
 
 // FIXME
 const apiUrl = "http://121.36.47.113:3000";
@@ -44,6 +46,7 @@ export const QuestionnaireFill = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [reload, setReload] = useState(false);
 
   // TODO 有些组件上有 id="question.no" 这是啥意思，我怀疑你这里写得有问题
   // 2021-7-13 Anak7n
@@ -57,7 +60,6 @@ export const QuestionnaireFill = () => {
 
   useEffect(() => {
     if (!isLoading && questionnaire !== undefined && answer.length === 0) {
-      console.log("questionnaire", questionnaire.questions.length);
       for (const question of questionnaire.questions) {
         const defaultAnswer = {
           no: question.no,
@@ -70,14 +72,12 @@ export const QuestionnaireFill = () => {
       }
       setAnswer(answer);
       setErrorMessage(errorMessage);
-      console.log("初始情况下，answer的值", answer);
     }
   }, [questionnaire]);
 
   useEffect(() => {
     (async () => {
       if (questionnaire !== undefined && isSubmit === true) {
-        console.log("点击提交问卷答案");
         const submitAnswer = {
           id: questionnaire.id,
           answer: answer,
@@ -93,16 +93,13 @@ export const QuestionnaireFill = () => {
               answer[ques_index].answer === "" ||
               answer[ques_index].answer.length === 0)
           ) {
-            console.log("进入这个页面");
             errorMessage[ques_index] = true;
           } else {
             errorMessage[ques_index] = false;
           }
         }
         setErrorMessage(errorMessage);
-        console.log(errorMessage);
         if (errorMessage.indexOf(true) !== -1) {
-          console.log(errorMessage);
           setIsSubmit(false);
           Modal.error({
             title: "当前问卷还有未填写正确的地方哦",
@@ -111,7 +108,6 @@ export const QuestionnaireFill = () => {
             okText: "确定",
           });
         } else {
-          console.log("最终提交的问卷答案", submitAnswer);
           try {
             await run(
               axios.post(
@@ -128,9 +124,26 @@ export const QuestionnaireFill = () => {
         }
       }
     })();
-  }, [isSubmit, answer]);
+  }, [isSubmit]);
 
-  console.log("questionnaire", questionnaire);
+  useDeepCompareEffect(() => {
+    if (answer.length !== 0) {
+      for (const question of questionnaire.questions) {
+        const ques_index = questionnaire.questions.indexOf(question);
+        if (
+          question.isNecessary === true &&
+          (answer[ques_index].answer === null ||
+            answer[ques_index].answer === "" ||
+            answer[ques_index].answer.length === 0)
+        ) {
+          errorMessage[ques_index] = true;
+        } else {
+          errorMessage[ques_index] = false;
+        }
+      }
+      setErrorMessage(errorMessage);
+    }
+  }, [answer, errorMessage]);
 
   function generateKey() {
     return Number(Math.random().toString().substr(3, 5) + Date.now()).toString(
@@ -144,7 +157,6 @@ export const QuestionnaireFill = () => {
   const SingleChoiceDisplay = (props) => {
     const { question, index } = props;
     const quest_display_id = index + 1;
-    console.log(errorMessage[quest_display_id - 1]);
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
@@ -161,13 +173,7 @@ export const QuestionnaireFill = () => {
             onChange={(e) => {
               answer[index].answer = e.target.value;
               setAnswer(answer);
-              if (e.target.value === null) {
-                errorMessage[index] = true;
-                setErrorMessage(errorMessage);
-              } else {
-                errorMessage[index] = false;
-                setErrorMessage(errorMessage);
-              }
+              setReload((reload) => !reload);
             }}
           >
             <Space direction="vertical">
@@ -212,13 +218,7 @@ export const QuestionnaireFill = () => {
               });
               answer[index].answer = checkedValues;
               setAnswer(answer);
-              if (checkedValues.length === 0) {
-                errorMessage[index] = true;
-                setErrorMessage(errorMessage);
-              } else {
-                errorMessage[index] = false;
-                setErrorMessage(errorMessage);
-              }
+              setReload((reload) => !reload);
             }}
           >
             <Space direction="vertical">
@@ -246,7 +246,6 @@ export const QuestionnaireFill = () => {
   const SingleLineTextDisplay = (props) => {
     const { question, index } = props;
     const quest_display_id = index + 1;
-    console.log(errorMessage[quest_display_id - 1]);
     return (
       <Question key={generateKey()}>
         <QuestionTitle>
@@ -257,20 +256,13 @@ export const QuestionnaireFill = () => {
 
         {question.remarks !== null ? <div>{question.remarks}</div> : <></>}
         <QuestionContent>
-          <Input
+          <InputArea
             defaultValue={answer.length === 0 ? null : answer[index].answer}
             onChange={(e) => {
               answer[index].answer = e.target.value;
               setAnswer(answer);
-              if (e.target.value === "") {
-                errorMessage[index] = true;
-                setErrorMessage(errorMessage);
-              } else {
-                errorMessage[index] = false;
-                setErrorMessage(errorMessage);
-              }
             }}
-          ></Input>
+          ></InputArea>
         </QuestionContent>
         {errorMessage[quest_display_id - 1] ? (
           <ErrorMessage>请输入文本题答案</ErrorMessage>
@@ -293,6 +285,9 @@ export const QuestionnaireFill = () => {
         alignItems: "center",
       }}
     >
+      <Helmet>
+        <title>{questionnaire.title}</title>
+      </Helmet>
       <Content
         style={{
           padding: "10 50px",
@@ -304,9 +299,9 @@ export const QuestionnaireFill = () => {
       >
         <Title>{questionnaire.title}</Title>
         {questionnaire.description === null ? (
-          <InputDescription>{questionnaire.description}</InputDescription>
-        ) : (
           <></>
+        ) : (
+          <InputDescription>{questionnaire.description}</InputDescription>
         )}
         <Divider />
         <div
@@ -367,14 +362,6 @@ export const QuestionnaireFill = () => {
   );
 };
 
-// const Questions = styled.div`
-//   width:100%;
-//   text-align: center;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100%;
-// `;
-
 const Title = styled.div`
   font-size: 35px;
   margin-bottom: 20px;
@@ -413,7 +400,7 @@ const QuestionRequire = styled.span`
   margin-left: 5px;
 `;
 
-const InputDescription = styled(Input)`
+const InputDescription = styled.div`
   font-size: 18px;
   margin-bottom: 64px;
 `;
@@ -440,14 +427,16 @@ const SubmitSuccess = styled.div`
 `;
 
 const SubmitSuccessContent = styled.div`
-  height: 100%;
+  height: 90%;
   width: 100%;
   position: absolute;
-  width: 100%;
-  height: 100%;
   background-color: #f5f5f5;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: right bottom;
+  background-position-x: 50%, 50%;
+  background-position-y: 50px;
   background-image: url(${pawImge});
+  background-size: 700px, 600px;
 `;
+
+const InputArea = styled(Input)``;

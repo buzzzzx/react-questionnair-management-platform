@@ -1,32 +1,26 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import styled from "@emotion/styled";
-import {
-  Spin,
-  Radio,
-  Space,
-  Checkbox,
-  Input,
-  Divider,
-  Layout,
-  Button,
-  Modal,
-  Anchor,
-} from "antd";
+import { useLocation } from "react-router";
 import { Helmet } from "react-helmet";
+import styled from "@emotion/styled";
+import { useAnswer } from "../../utils/answer";
 import { useQuestionnaire } from "../../utils/questionnaire";
+import { Radio, Checkbox, Input, Space, Divider, Layout, Spin } from "antd";
+import { useState, useEffect } from "react";
 
-export const QuestionnairePreview = () => {
+export const QuestionnaireAnswer = () => {
+  // http://localhost:3000/answers/164
   const location = useLocation();
-  const { Content, Footer } = Layout;
-  const navigate = useNavigate();
-
   const arr = location.pathname.split("/");
-  const id =
-    arr[arr.length - 2] === "questionnaires"
-      ? false
-      : Number(arr[arr.length - 2]);
+  const quest_id = arr[2];
+  const answer_id = arr[4];
+  // GET 答卷内容
+  const { data: answers, isLoading, error } = useAnswer(answer_id);
 
-  const { data: questionnaire, isLoading } = useQuestionnaire(id);
+  // GET 问卷内容
+  const {
+    data: questionnaire,
+    isLoading2,
+    error2,
+  } = useQuestionnaire(quest_id);
 
   function generateKey() {
     return Number(Math.random().toString().substr(3, 5) + Date.now()).toString(
@@ -34,13 +28,28 @@ export const QuestionnairePreview = () => {
     );
   }
 
-  const onSubmit = () => {
-    Modal.error({
-      title: "这是问卷预览界面，不能提交哦",
-      content: "问卷预览界面，只可预览问卷，不可提交",
-      okText: "确定",
-    });
-  };
+  console.log("answers", answers);
+  console.log("questionnaire", questionnaire);
+
+  const { Content, Footer } = Layout;
+
+  const [answer, setAnswer] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [isView, setIsView] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !isLoading2) {
+      const currentAnswer = answers.answer.map((item) => item.answer);
+      setAnswer(currentAnswer);
+      const currentQuestions = questionnaire.questions;
+      setQuestions(currentQuestions);
+      setDescription(questionnaire.description);
+      setTitle(questionnaire.title);
+      setIsView(true);
+    }
+  }, [isLoading, isLoading2]);
 
   const SingleChoiceDisplay = (props) => {
     const { question, index } = props;
@@ -56,7 +65,7 @@ export const QuestionnairePreview = () => {
         {question.remarks !== null ? <div>{question.remarks}</div> : <></>}
 
         <QuestionContent>
-          <Radio.Group>
+          <Radio.Group disabled={true} defaultValue={answer[index]}>
             <Space direction="vertical">
               {question.option.map((choice, index) => {
                 return (
@@ -86,7 +95,7 @@ export const QuestionnairePreview = () => {
         </QuestionTitle>
         {question.remarks !== null ? <div>{question.remarks}</div> : <></>}
         <QuestionContent>
-          <Checkbox.Group>
+          <Checkbox.Group disabled={true} defaultValue={answer[index]}>
             <Space direction="vertical">
               {question.option.map((choice, index) => {
                 return (
@@ -117,14 +126,14 @@ export const QuestionnairePreview = () => {
 
         {question.remarks !== null ? <div>{question.remarks}</div> : <></>}
         <QuestionContent>
-          <Input></Input>
+          <InputArea defaultValue={answer[index]} disabled={true}></InputArea>
         </QuestionContent>
         <Divider />
       </Question>
     );
   };
 
-  return isLoading ? (
+  return isView === false ? (
     <Spin size={"large"} />
   ) : (
     <Layout
@@ -133,11 +142,10 @@ export const QuestionnairePreview = () => {
         display: "flex",
         textAlign: "center",
         alignItems: "center",
-        backgroundImage: "none",
       }}
     >
       <Helmet>
-        <title>电脑预览</title>
+        <title>答卷显示</title>
       </Helmet>
       <Content
         style={{
@@ -148,11 +156,11 @@ export const QuestionnairePreview = () => {
           width: "60%",
         }}
       >
-        <Title>{questionnaire.title}</Title>
-        {questionnaire.description === null ? (
+        <Title>{title}</Title>
+        {description === null ? (
           <></>
         ) : (
-          <InputDescription>{questionnaire.description}</InputDescription>
+          <InputDescription>{description}</InputDescription>
         )}
         <Divider />
         <div
@@ -161,11 +169,10 @@ export const QuestionnairePreview = () => {
             marginBottom: "20",
           }}
         >
-          {questionnaire.questions.map((question, index) => {
+          {questions.map((question, index) => {
             if (question.type === 0) {
               return (
                 <SingleChoiceDisplay
-                  id="question.no"
                   key={generateKey()}
                   question={question}
                   index={index}
@@ -174,7 +181,6 @@ export const QuestionnairePreview = () => {
             } else if (question.type === 1) {
               return (
                 <MultipleChoiceDisplay
-                  id="question.no"
                   key={generateKey()}
                   question={question}
                   index={index}
@@ -183,7 +189,6 @@ export const QuestionnairePreview = () => {
             } else {
               return (
                 <SingleLineTextDisplay
-                  id="question.no"
                   key={generateKey()}
                   question={question}
                   index={index}
@@ -191,35 +196,12 @@ export const QuestionnairePreview = () => {
               );
             }
           })}
-          <div style={{ paddingBottom: "20px" }}>
-            <ButtonInner type="primary" size="large" onClick={onSubmit}>
-              提交问卷
-            </ButtonInner>
-            <ButtonInner
-              size="large"
-              onClick={() => {
-                navigate("/");
-              }}
-            >
-              返回首页
-            </ButtonInner>
-          </div>
         </div>
       </Content>
-
       <Footer>问卷喵 提供技术支持</Footer>
     </Layout>
   );
 };
-
-// const Questions = styled.div`
-//   width: 100%;
-//   text-align: center;
-//   align-items: center;
-//   justify-content: center;
-//   height: 95%;
-//   overflow: visible;
-// `;
 
 const Title = styled.div`
   font-size: 35px;
@@ -240,7 +222,7 @@ const QuestionTitle = styled.div`
   font-size: 20px;
   color: #444444;
   font-weight: bold;
-  height: 99%;
+  height: auto;
   line-height: 20px;
   position: relative;
   margin-bottom: 15px;
@@ -261,14 +243,8 @@ const QuestionRequire = styled.span`
 
 const InputDescription = styled.div`
   font-size: 18px;
-  margin-bottom: 40px;
-  margin-top: 18px;
+  margin-bottom: 20px;
+  text-align: center;
 `;
 
-const ButtonInner = styled(Button)`
-  padding: 6px 20px;
-  margin: 0 10px;
-  outline: none;
-  cursor: pointer;
-  font-size: 18px;
-`;
+const InputArea = styled(Input)``;
