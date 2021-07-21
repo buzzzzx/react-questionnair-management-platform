@@ -60,9 +60,15 @@ export const QuestionnaireFill = () => {
 
   useEffect(() => {
     if (!isLoading && questionnaire !== undefined && answer.length === 0) {
-      if (currenttime > questionnaire.endtime) {
-        setIsExpired(true);
+      console.log(questionnaire.endtime);
+      if (questionnaire.endtime === null) {
+        setIsExpired(false);
+      } else {
+        if (currenttime > questionnaire.endtime) {
+          setIsExpired(true);
+        }
       }
+
       for (const question of questionnaire.questions) {
         const defaultAnswer = {
           no: question.no,
