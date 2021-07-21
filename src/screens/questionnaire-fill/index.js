@@ -20,6 +20,7 @@ import {
 import "antd/dist/antd.css";
 import { useAsync } from "../../utils/use-async";
 import axios from "axios";
+import dayjs from "dayjs";
 
 import pawImge from "../../assets/qisicat.svg";
 
@@ -39,7 +40,6 @@ export const QuestionnaireFill = () => {
   } = useFillQuestionnaire(openId);
 
   const { Content, Footer } = Layout;
-  const { Link } = Anchor;
 
   const [loading, setIsLoading] = useState(true);
   const [answer, setAnswer] = useState([]);
@@ -47,9 +47,9 @@ export const QuestionnaireFill = () => {
   const [errorMessage, setErrorMessage] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
   const [reload, setReload] = useState(false);
+  const [isExpired, setIsExpired] = useState(false);
 
-  // TODO 有些组件上有 id="question.no" 这是啥意思，我怀疑你这里写得有问题
-  // 2021-7-13 Anak7n
+  const currenttime = dayjs();
   const {
     run,
     isLoading: submitLoading,
@@ -60,6 +60,9 @@ export const QuestionnaireFill = () => {
 
   useEffect(() => {
     if (!isLoading && questionnaire !== undefined && answer.length === 0) {
+      if (currenttime > questionnaire.endtime) {
+        setIsExpired(true);
+      }
       for (const question of questionnaire.questions) {
         const defaultAnswer = {
           no: question.no,
@@ -83,8 +86,6 @@ export const QuestionnaireFill = () => {
           answer: answer,
         };
 
-        //判断是否有必填问题未填
-        // FIXME 这里有几个 bug：1. 自动定位；2. 判断文本题未填，应该还要加一个判断是否为空字符
         for (const question of questionnaire.questions) {
           const ques_index = questionnaire.questions.indexOf(question);
           if (
@@ -150,8 +151,6 @@ export const QuestionnaireFill = () => {
       36
     );
   }
-
-  const onSubmit = async () => {};
 
   // 单选题显示
   const SingleChoiceDisplay = (props) => {
@@ -281,6 +280,10 @@ export const QuestionnaireFill = () => {
         margin: "10rem auto",
       }}
     />
+  ) : isExpired === true ? (
+    <SubmitSuccessContent>
+      <SubmitSuccess>问卷已结束发布，无法填写和提交</SubmitSuccess>
+    </SubmitSuccessContent>
   ) : isSuccess === false ? (
     <Layout
       className="layout"
