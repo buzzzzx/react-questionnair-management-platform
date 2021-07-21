@@ -23,11 +23,7 @@ class Bar1 extends Component {
   getOption = () => {
     let option = {
       title: {
-        text:
-          this.props.statistic.no +
-          "、" +
-          this.props.statistic.title +
-          "（多选题）",
+        text: this.props.no + "、" + this.props.statistic.title + "（多选题）",
         left: "center",
       },
       xAxis: {

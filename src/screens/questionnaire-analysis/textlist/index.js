@@ -8,10 +8,7 @@ class Textlist extends React.Component {
     return (
       <div>
         <Divider orientation="center">
-          {this.props.statistic?.no +
-            "、" +
-            this.props.statistic?.title +
-            "（文本题）"}
+          {this.props.no + "、" + this.props.statistic?.title + "（文本题）"}
         </Divider>
         <List
           size="small"

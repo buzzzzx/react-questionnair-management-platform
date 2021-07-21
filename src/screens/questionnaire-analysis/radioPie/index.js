@@ -10,10 +10,10 @@ class Pie1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.props.statistic.option,
+      data: this.props.statistic?.option,
       celldata: [],
     };
-    for (let option of this.props.statistic.option) {
+    for (let option of this.props.statistic?.option) {
       this.setState({ celldata: this.state.celldata.push(option.name) });
     }
   }
@@ -21,11 +21,7 @@ class Pie1 extends React.Component {
   getOption = () => {
     let option = {
       title: {
-        text:
-          this.props.statistic.no +
-          "、" +
-          this.props.statistic.title +
-          "（单选题）",
+        text: this.props.no + "、" + this.props.statistic?.title + "（单选题）",
         left: "center",
       },
       tooltip: {
@@ -53,16 +49,19 @@ class Pie1 extends React.Component {
       },
       series: [
         {
-          name: "分数",
           type: "pie",
-          radius: [30, 110],
-          center: ["50%", "50%"],
-          emphasis: { focus: "data" },
+          radius: "50%",
+          data: this.state.data,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
           label: {
             formatter: "{b}: {@2012} ({d}%)",
           },
-          roseType: "area",
-          data: this.state.data,
         },
       ],
     };

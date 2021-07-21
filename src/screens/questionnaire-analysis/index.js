@@ -17,6 +17,7 @@ const { Content, Sider } = Layout;
 export const QuestionnaireAnalysis = () => {
   var [statistic, setStatistic] = useState();
   var [ifquestion, setIfquestion] = useState(false);
+  var [No, setNo] = useState(1);
   const id = useQuestionnaireId();
   const { data: questionList, isLoading } = useAnalysisQuestionnaire(id);
 
@@ -25,19 +26,19 @@ export const QuestionnaireAnalysis = () => {
       <article>
         {question.type === 0 ? (
           <div>
-            <Pie1 statistic={question} />
+            <Pie1 statistic={question} no={No} key={No} />
             <br />
           </div>
         ) : null}
         {question.type === 1 ? (
           <div>
-            <Bar1 statistic={question} />
+            <Bar1 statistic={question} no={No} key={No} />
             <br />
           </div>
         ) : null}
         {question.type === 2 ? (
           <div>
-            <Textlist statistic={question} />
+            <Textlist statistic={question} no={No} key={No} />
             <br />
           </div>
         ) : null}
@@ -81,11 +82,9 @@ export const QuestionnaireAnalysis = () => {
                   <Menu.Item
                     key={index}
                     onClick={() => {
-                      console.log(question);
                       setIfquestion((ifquestion = true));
                       setStatistic((statistic = question));
-                      console.log("===========================");
-                      console.log(statistic);
+                      setNo((No = index + 1));
                     }}
                   >
                     题目{index + 1}
@@ -100,7 +99,7 @@ export const QuestionnaireAnalysis = () => {
             <Breadcrumb.Item>{questionList?.title}</Breadcrumb.Item>
             <Breadcrumb.Item>统计分析</Breadcrumb.Item>
             {ifquestion ? (
-              <Breadcrumb.Item>题目{statistic?.no}</Breadcrumb.Item>
+              <Breadcrumb.Item>题目{No}</Breadcrumb.Item>
             ) : (
               <Breadcrumb.Item>问卷信息</Breadcrumb.Item>
             )}
