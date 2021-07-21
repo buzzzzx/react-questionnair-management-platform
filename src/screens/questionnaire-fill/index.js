@@ -115,6 +115,7 @@ export const QuestionnaireFill = () => {
             okText: "确定",
           });
         } else {
+          console.log("提交的答卷", submitAnswer);
           try {
             await run(
               axios.post(
@@ -178,7 +179,6 @@ export const QuestionnaireFill = () => {
             onChange={(e) => {
               answer[index].answer = e.target.value;
               setAnswer(answer);
-              setReload((reload) => !reload);
             }}
           >
             <Space direction="vertical">
@@ -223,7 +223,6 @@ export const QuestionnaireFill = () => {
               });
               answer[index].answer = checkedValues;
               setAnswer(answer);
-              setReload((reload) => !reload);
             }}
           >
             <Space direction="vertical">

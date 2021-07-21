@@ -14,7 +14,9 @@ export const MultipleChoice = (props) => {
   const {
     questionList,
     setQuestionList,
+    editorStatus,
     setEditorStatus,
+    editorType,
     setEditorType,
     isUpdate,
     currQues,

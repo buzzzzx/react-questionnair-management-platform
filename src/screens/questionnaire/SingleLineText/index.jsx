@@ -7,7 +7,9 @@ export const SingleLineText = (props) => {
   const {
     questionList,
     setQuestionList,
+    editorStatus,
     setEditorStatus,
+    editorType,
     setEditorType,
     isUpdate,
     currQues,

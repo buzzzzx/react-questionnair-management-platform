@@ -66,12 +66,14 @@ export const Questionnaire = () => {
   const [description, setDescription] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(true);
+  const [ques_no, setQuesno] = useState(0);
 
   useEffect(() => {
     if (!isLoading && editingQuestionnaire !== undefined) {
       setQuestionList(editingQuestionnaire.questions);
       setquestionnaireTitle(editingQuestionnaire.title);
       setDescription(editingQuestionnaire.description);
+      setQuesno(editingQuestionnaire.questions.length + 1);
     }
   }, [isLoading, editingQuestionnaire]);
 
@@ -100,6 +102,12 @@ export const Questionnaire = () => {
       content: "问卷创建好后，点击完成编辑按钮，提交问卷",
     },
   ];
+
+  function generateKey() {
+    return Number(Math.random().toString().substr(3, 5) + Date.now()).toString(
+      36
+    );
+  }
 
   const onFinish = () => {
     const questionnaire = {
@@ -144,13 +152,8 @@ export const Questionnaire = () => {
     );
   }
 
-  var current_ques_no = 0;
-  function ques_no() {
-    return ++current_ques_no;
-  }
-
   const currSingleChoiceQues = {
-    no: ques_no(),
+    no: generateKey(),
     title: "",
     type: 0,
     remarks: null,
@@ -162,7 +165,7 @@ export const Questionnaire = () => {
   };
 
   const currMultipleChoiceQues = {
-    no: ques_no(),
+    no: generateKey(),
     title: "",
     type: 1,
     remarks: null,
@@ -174,7 +177,7 @@ export const Questionnaire = () => {
   };
 
   const currSingleLineTextQues = {
-    no: ques_no(),
+    no: generateKey(),
     type: 2,
     title: null,
     isNecessary: false,
@@ -208,6 +211,8 @@ export const Questionnaire = () => {
               setEditorStatus={setEditorStatus}
               editorType={editorType}
               setEditorType={setEditorType}
+              ques_no={ques_no}
+              setQuesno={setQuesno}
             ></LeftSide>
           </Sider>
           <Layout className="site-layout" style={{ marginLeft: 200 }}>
@@ -305,6 +310,8 @@ export const Questionnaire = () => {
               setEditorStatus={setEditorStatus}
               editorType={editorType}
               setEditorType={setEditorType}
+              ques_no={ques_no}
+              setQuesno={setQuesno}
             ></LeftSide>
           </Sider>
           <Layout className="site-layout" style={{ marginLeft: 200 }}>
@@ -402,6 +409,8 @@ export const Questionnaire = () => {
                 setEditorStatus={setEditorStatus}
                 editorType={editorType}
                 setEditorType={setEditorType}
+                ques_no={ques_no}
+                setQuesno={setQuesno}
               ></LeftSide>
             </Sider>
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
@@ -506,6 +515,8 @@ export const Questionnaire = () => {
                 setEditorStatus={setEditorStatus}
                 editorType={editorType}
                 setEditorType={setEditorType}
+                ques_no={ques_no}
+                setQuesno={setQuesno}
               ></LeftSide>
             </Sider>
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
@@ -609,6 +620,8 @@ export const Questionnaire = () => {
                 setEditorStatus={setEditorStatus}
                 editorType={editorType}
                 setEditorType={setEditorType}
+                ques_no={ques_no}
+                setQuesno={setQuesno}
               ></LeftSide>
             </Sider>
             <Layout className="site-layout" style={{ marginLeft: 200 }}>

@@ -14,7 +14,9 @@ export const SingleChoice = (props) => {
   const {
     questionList,
     setQuestionList,
+    editorStatus,
     setEditorStatus,
+    editorType,
     setEditorType,
     isUpdate,
     currQues,
@@ -119,6 +121,7 @@ export const SingleChoice = (props) => {
     if (isUpdate && questionItem === currQues) {
       setEditorStatus("NotEdit");
       setEditorType(null);
+      setIsUpdate(false);
     } else if (isUpdate && questionItem !== currQues) {
       var editQues = questionList.find((ques) => ques.no === questionItem.no);
       editQues.title = questionItem.title;

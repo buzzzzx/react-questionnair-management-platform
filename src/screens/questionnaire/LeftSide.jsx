@@ -8,7 +8,14 @@ import {
 import { Menu, Modal } from "antd";
 
 export const LeftSide = (props) => {
-  const { editorStatus, setEditorStatus, setEditorType } = props;
+  const {
+    editorStatus,
+    setEditorStatus,
+    editorType,
+    setEditorType,
+    ques_no,
+    setQuesno,
+  } = props;
   const [selectedKey, setSelectKey] = useState(null);
 
   return (
@@ -28,6 +35,7 @@ export const LeftSide = (props) => {
               setSelectKey(["1"]);
               setEditorType("SingleChoice");
               setEditorStatus("Edit");
+              setQuesno(ques_no + 1);
             } else {
               setSelectKey(null);
               Modal.info({
@@ -48,6 +56,7 @@ export const LeftSide = (props) => {
               setSelectKey(["2"]);
               setEditorType("MultipleChoice");
               setEditorStatus("Edit");
+              setQuesno(ques_no + 1);
             } else {
               setSelectKey(null);
               Modal.info({
@@ -68,6 +77,7 @@ export const LeftSide = (props) => {
               setSelectKey(["3"]);
               setEditorType("SingleLineText");
               setEditorStatus("Edit");
+              setQuesno(ques_no + 1);
             } else {
               setSelectKey(null);
               Modal.info({
