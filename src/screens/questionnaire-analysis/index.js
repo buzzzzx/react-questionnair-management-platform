@@ -10,6 +10,7 @@ import { ContainerOutlined, TeamOutlined } from "@ant-design/icons";
 import MenuItem from "antd/lib/menu/MenuItem";
 import { useAnalysisQuestionnaire } from "../../utils/questionnaire";
 import { useQuestionnaireId } from "../../utils/url";
+import { Helmet } from "react-helmet";
 
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
@@ -55,6 +56,9 @@ export const QuestionnaireAnalysis = () => {
     />
   ) : (
     <Layout>
+      <Helmet>
+        <title>问卷分析</title>
+      </Helmet>
       <Layout>
         <Sider width={200} className="site-layout-background">
           <Menu
